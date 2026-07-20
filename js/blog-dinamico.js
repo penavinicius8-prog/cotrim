@@ -4,14 +4,17 @@
  * com os artigos publicados no WordPress (post type "blog_leve"), mantendo
  * 100% do design/CSS. Se a API falhar, mantém o conteúdo estático (fallback).
  *
- * WordPress:
- *  - Post type: blog_leve  → endpoint /wp/v2/blog_leve
+ * WordPress (admin.cotrimadvogados.adv.br):
+ *  - Post type: blog_leve  → rest_base "blog"
+ *  - Usamos o formato ?rest_route= porque os permalinks bonitos (/wp-json/)
+ *    não estão ativos; este formato funciona sempre. Por isso os parâmetros
+ *    extras são anexados com "&" (a base já traz o "?").
  *  - Nativos: título, corpo (content), resumo (excerpt), imagem destacada, data, categoria
  *  - ACF: tempo_leitura (opcional, senão calcula ~200 palavras/min) e rotulo_autor
  *  - Post individual abre por: blogpost.html?slug=<slug-do-post>
  */
 
-const WP_BLOG = "https://testeblog.levestudios.com.br/wp-json/wp/v2/blog";
+const WP_BLOG = "https://admin.cotrimadvogados.adv.br/?rest_route=/wp/v2/blog";
 const FALLBACK_IMG = "images/post-trabalhista.jpg";
 
 /* ---------- Helpers ---------- */
@@ -80,7 +83,7 @@ function renderCard(post, escuro) {
 
 /* ---------- LISTAGEM (blog.html) ---------- */
 async function carregarListagem(grid) {
-  const res = await fetch(`${WP_BLOG}?_embed&acf_format=standard&per_page=24&orderby=date&order=desc`);
+  const res = await fetch(`${WP_BLOG}&_embed&acf_format=standard&per_page=24&orderby=date&order=desc`);
   if (!res.ok) throw new Error('HTTP ' + res.status);
   const posts = await res.json();
   if (!posts.length) return; // sem posts publicados: mantém o estático
@@ -134,7 +137,7 @@ async function carregarSimilares(idAtual) {
   const esconder = () => { if (secao) secao.style.display = 'none'; };
   try {
     // "misturado" — traz os posts mais recentes de qualquer categoria, menos o atual
-    const res = await fetch(`${WP_BLOG}?_embed&acf_format=standard&per_page=4&orderby=date&order=desc&exclude=${idAtual}`);
+    const res = await fetch(`${WP_BLOG}&_embed&acf_format=standard&per_page=4&orderby=date&order=desc&exclude=${idAtual}`);
     if (!res.ok) return esconder();
     const posts = (await res.json()).slice(0, 3);
     if (posts.length) grid.innerHTML = posts.map(p => renderCard(p, true)).join('');
@@ -146,8 +149,8 @@ async function carregarSimilares(idAtual) {
 async function carregarPost(corpo) {
   const slug = new URLSearchParams(location.search).get('slug');
   const url = slug
-    ? `${WP_BLOG}?slug=${encodeURIComponent(slug)}&_embed&acf_format=standard`
-    : `${WP_BLOG}?per_page=1&orderby=date&order=desc&_embed&acf_format=standard`;
+    ? `${WP_BLOG}&slug=${encodeURIComponent(slug)}&_embed&acf_format=standard`
+    : `${WP_BLOG}&per_page=1&orderby=date&order=desc&_embed&acf_format=standard`;
   const res = await fetch(url);
   if (!res.ok) throw new Error('HTTP ' + res.status);
   const posts = await res.json();

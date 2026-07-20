@@ -11,7 +11,10 @@
  *    **redesenham** **o contencioso brasileiro.**"
  */
 
-const WP_URL = "https://testeblog.levestudios.com.br/wp-json/wp/v2/edicoes?acf_format=standard&per_page=1&orderby=date&order=desc";
+// WordPress do cliente (admin.cotrimadvogados.adv.br). Usamos o formato
+// ?rest_route= porque os permalinks bonitos (/wp-json/) não estão ativos —
+// este formato funciona sempre, com ou sem permalink bonito.
+const WP_URL = "https://admin.cotrimadvogados.adv.br/?rest_route=/wp/v2/edicoes&acf_format=standard&per_page=1&orderby=date&order=desc";
 
 // Converte "texto **destaque** texto" em HTML com <span> + quebras de linha
 function formatarTitulo(txt) {

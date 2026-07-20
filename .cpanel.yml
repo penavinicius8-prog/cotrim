@@ -2,6 +2,8 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/cotri3184868/public_html/
+    # remove o placeholder do host (index.php vazio que deixa a página em branco)
+    - /bin/rm -f $DEPLOYPATH/index.php
     - /bin/cp -R index.html $DEPLOYPATH
     - /bin/cp -R escritorio.html $DEPLOYPATH
     - /bin/cp -R areas-de-atuacao.html $DEPLOYPATH

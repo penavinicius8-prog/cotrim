@@ -1,0 +1,248 @@
+/* ============================================================
+   COTRIM ADVOGADOS — ÁREAS DE ATUAÇÃO
+   Seções: hero centralizado, lista de 17 áreas.
+   Mobile-first | breakpoints independentes (768 / 1024 / 1440)
+   ============================================================ */
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.areas-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: #00192d;
+}
+.areas-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/hero-areas.jpg');
+  background-size: cover;
+  background-position: center top;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+.areas-hero-glow {
+  position: absolute;
+  width: 1382px;
+  height: 1372px;
+  max-width: none;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.areas-hero-glow-1 { right: -800px; top: 100px; }
+.areas-hero-glow-2 { left: -800px; bottom: 300px; }
+.areas-hero-decos { display: none; }
+.areas-hero-deco-1 {
+  position: absolute;
+  width: 106px; height: 106px;
+  background-color: #e3cda4;
+  left: calc(50% - 532px); top: 201px;
+}
+.areas-hero-deco-2 {
+  position: absolute;
+  width: 69px; height: 69px;
+  background-color: rgba(235, 218, 184, 0.71);
+  left: calc(50% - 434px); top: 294px;
+}
+.areas-hero-deco-3 {
+  position: absolute;
+  width: 106px; height: 106px;
+  background-color: #e3cda4;
+  right: calc(50% - 589px); top: 499px;
+}
+.areas-hero-deco-4 {
+  position: absolute;
+  width: 69px; height: 69px;
+  background-color: rgba(235, 218, 184, 0.71);
+  right: calc(50% - 501px); top: 613px;
+}
+.areas-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 130px 16px 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.areas-hero-eyebrow {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.35;
+  letter-spacing: 2.76px;
+  text-transform: uppercase;
+  color: #d7bf99;
+}
+.areas-hero-titulo {
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  color: #ffffff;
+  max-width: 610px;
+}
+.areas-hero-titulo span { color: #e3cda4; }
+
+@media (min-width: 768px) {
+  .areas-hero-inner { padding: 160px 24px 90px; }
+  .areas-hero-titulo { font-size: 46px; letter-spacing: -2.8px; }
+}
+
+@media (min-width: 1024px) {
+  .areas-hero-inner { padding: 226px 32px 128px; }
+  .areas-hero-titulo { font-size: 59px; line-height: 1.1; letter-spacing: -3.54px; }
+  .areas-hero-decos { display: block; }
+}
+
+/* ============================================================
+   LISTA DE ÁREAS
+   ============================================================ */
+.areas-lista {
+  background-color: #ffffff;
+  padding: 60px 16px;
+}
+.areas-lista-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.areas-lista-topo {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.areas-lista-topo-esq { display: flex; flex-direction: column; gap: 20px; }
+.areas-lista-titulo {
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -2.2px;
+  color: #000000;
+  max-width: 504px;
+}
+.areas-lista-titulo strong { font-weight: 700; color: #032846; }
+.areas-lista-sub {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -1.2px;
+  color: #000000;
+  max-width: 384px;
+}
+.areas-lista-topo-dir {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  order: -1;
+}
+.areas-lista-label { color: #032846; }
+.areas-lista-decos { position: relative; display: none; }
+.areas-lista-deco-1 {
+  position: absolute;
+  width: 106px; height: 106px;
+  background-color: #e3cda4;
+  right: 260px; top: 40px;
+}
+.areas-lista-deco-2 {
+  position: absolute;
+  width: 69px; height: 69px;
+  background-color: rgba(235, 218, 184, 0.71);
+  right: 200px; top: 133px;
+}
+.areas-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: start;
+  gap: 16px 20px;
+}
+.areas-item {
+  display: flex;
+  flex-direction: column;
+  border-top: 0.8px solid rgba(0, 0, 0, 0.22);
+  border-bottom: 0.8px solid rgba(0, 0, 0, 0.22);
+}
+.areas-item-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 73px;
+  padding: 14px 16px 14px 18px;
+  background: none;
+  border: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.areas-item-cab:hover { background-color: #f7f4ee; }
+.areas-item-nome {
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.1;
+  letter-spacing: -1.08px;
+  color: #000000;
+  max-width: 218px;
+}
+.areas-item-mais {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 0.4px solid rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: -1.96px;
+  color: #000000;
+  transition: transform 0.3s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.areas-item.aberto .areas-item-mais {
+  transform: rotate(45deg);
+  color: #032846;
+  border-color: #032846;
+}
+.areas-item.aberto .areas-item-nome { color: #032846; }
+/* corpo colapsável (max-height, animação suave) */
+.areas-item-corpo {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.35s ease;
+}
+.areas-item.aberto .areas-item-corpo { max-height: 300px; }
+.areas-item-desc {
+  padding: 0 18px 22px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.3px;
+  color: #333333;
+  max-width: 360px;
+}
+
+@media (min-width: 768px) {
+  .areas-lista { padding: 80px 24px; }
+  .areas-lista-topo { flex-direction: row; justify-content: space-between; align-items: flex-start; }
+  .areas-lista-topo-dir { order: 0; align-items: flex-end; }
+  .areas-lista-titulo { font-size: 46px; letter-spacing: -3px; }
+  .areas-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .areas-lista { padding: 100px 32px 130px; }
+  .areas-lista-inner { gap: 48px; }
+  .areas-lista-titulo { font-size: 60px; line-height: 1.1; letter-spacing: -4.8px; }
+  .areas-lista-sub { font-size: 20px; letter-spacing: -1.6px; }
+  .areas-lista-decos { display: block; }
+  .areas-grid { grid-template-columns: 1fr 1fr 1fr; gap: 32px 20px; }
+}

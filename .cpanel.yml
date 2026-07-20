@@ -1,0 +1,16 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/cotri3184868/public_html/
+    - /bin/cp -R index.html $DEPLOYPATH
+    - /bin/cp -R escritorio.html $DEPLOYPATH
+    - /bin/cp -R areas-de-atuacao.html $DEPLOYPATH
+    - /bin/cp -R diferenciais.html $DEPLOYPATH
+    - /bin/cp -R sedes.html $DEPLOYPATH
+    - /bin/cp -R blog.html $DEPLOYPATH
+    - /bin/cp -R blogpost.html $DEPLOYPATH
+    - /bin/cp -R contato.html $DEPLOYPATH
+    - /bin/cp -R radar-tribunais-superiores.html $DEPLOYPATH
+    - /bin/cp -R css $DEPLOYPATH
+    - /bin/cp -R js $DEPLOYPATH
+    - /bin/cp -R images $DEPLOYPATH

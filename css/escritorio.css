@@ -1,0 +1,603 @@
+/* ============================================================
+   COTRIM ADVOGADOS — O ESCRITÓRIO
+   Seções: hero, historia (bandas), break, missao, socios, equipe.
+   Mobile-first | breakpoints independentes (768 / 1024 / 1440)
+   ============================================================ */
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.esc-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: #00192d;
+}
+.esc-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/hero-esc.jpg');
+  background-size: cover;
+  background-position: center top;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+.esc-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 110px 16px 50px;
+  display: flex;
+  justify-content: flex-end;
+}
+.esc-hero-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+.esc-hero-eyebrow {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.35;
+  letter-spacing: 2.76px;
+  text-transform: uppercase;
+  color: #d7bf99;
+  margin-bottom: 20px;
+}
+.esc-hero-titulo {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -2.1px;
+  color: #ffffff;
+  margin-bottom: 28px;
+  max-width: 605px;
+}
+.esc-hero-titulo span { color: #e3cda4; }
+.esc-hero-textos {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border-left: 1px solid rgba(255, 255, 255, 0.45);
+  padding-left: 20px;
+  max-width: 609px;
+}
+.esc-hero-textos p {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.35;
+  letter-spacing: -0.9px;
+  color: #ffffff;
+}
+.esc-hero-textos strong { font-weight: 700; }
+
+@media (min-width: 768px) {
+  .esc-hero-inner { padding: 130px 24px 60px; }
+  .esc-hero-titulo { font-size: 48px; letter-spacing: -2.9px; }
+  .esc-hero-textos p { font-size: 16px; letter-spacing: -0.96px; }
+}
+
+@media (min-width: 1024px) {
+  .esc-hero-inner { padding: 209px 32px 80px; }
+  .esc-hero-conteudo { width: 52%; }
+  .esc-hero-eyebrow { margin-bottom: 26px; }
+  .esc-hero-titulo { font-size: 54px; line-height: 1.1; letter-spacing: -3.2px; margin-bottom: 40px; }
+  .esc-hero-textos { padding-left: 21px; }
+}
+
+/* ============================================================
+   NOSSA HISTÓRIA
+   ============================================================ */
+.esc-historia {
+  background-color: #ffffff;
+  padding: 60px 16px;
+}
+.esc-historia-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.esc-historia-topo {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 24px;
+  align-items: flex-start;
+}
+.esc-historia-titulo {
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  color: #000000;
+  max-width: 615px;
+}
+.esc-historia-titulo span { font-weight: 700; color: #032846; }
+.esc-historia-label { color: #032846; flex-shrink: 0; }
+.esc-historia-bandas { display: flex; flex-direction: column; }
+.esc-historia-banda {
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #999999;
+}
+.esc-historia-banda:last-child { border-bottom: none; }
+.esc-historia-banda-navy {
+  background: radial-gradient(circle at 0% 0%, #2b5282 0%, #163657 45%, #0b2742 70%, #00192d 100%);
+}
+.esc-historia-banda-cinza { background-color: #f1f1f1; }
+.esc-historia-banda-foto {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+}
+.esc-historia-banda-cinza .esc-historia-banda-foto { order: -1; }
+.esc-historia-banda-texto {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.35;
+  letter-spacing: -0.9px;
+  padding: 28px 20px;
+}
+.esc-historia-banda-navy .esc-historia-banda-texto { color: #ffffff; }
+.esc-historia-banda-cinza .esc-historia-banda-texto { color: #000000; }
+
+@media (min-width: 768px) {
+  .esc-historia { padding: 80px 24px; }
+  .esc-historia-topo { flex-direction: row; justify-content: space-between; }
+  .esc-historia-titulo { font-size: 46px; letter-spacing: -2.8px; }
+  .esc-historia-banda { flex-direction: row; align-items: stretch; }
+  .esc-historia-banda-foto { flex: 1 1 0; width: auto; height: auto; align-self: stretch; min-height: 220px; }
+  .esc-historia-banda-cinza .esc-historia-banda-foto { order: 0; }
+  .esc-historia-banda-texto { flex: 0 1 600px; padding: 32px 28px; align-self: center; }
+  .esc-historia-banda-cinza .esc-historia-banda-texto { text-align: right; }
+}
+
+@media (min-width: 1024px) {
+  .esc-historia { padding: 100px 32px; }
+  .esc-historia-inner { gap: 48px; }
+  .esc-historia-titulo { font-size: 58px; line-height: 1.1; letter-spacing: -3.5px; }
+  .esc-historia-banda { min-height: 253px; }
+  .esc-historia-banda-texto { font-size: 16px; letter-spacing: -0.96px; padding: 40px; flex-basis: 640px; }
+}
+
+@media (min-width: 1440px) {
+  .esc-historia-titulo { font-size: 67.9px; letter-spacing: -4.08px; }
+}
+
+/* ============================================================
+   FAIXA INSTITUCIONAL (break)
+   ============================================================ */
+.esc-break {
+  position: relative;
+  overflow: hidden;
+  background-color: #00192d;
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 70px 24px;
+}
+.esc-break-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/esc-break-bg.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  mix-blend-mode: overlay;
+  opacity: 0.35;
+}
+.esc-break-glow {
+  position: absolute;
+  width: 1382px;
+  height: 1372px;
+  max-width: none;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.esc-break-glow-1 { right: -800px; top: 100px; }
+.esc-break-glow-2 { left: -800px; bottom: 100px; }
+.esc-break-union {
+  position: absolute;
+  display: none;
+  pointer-events: none;
+}
+.esc-break-union-1 { width: 158px; left: 301px; top: 38px; }
+.esc-break-union-2 { width: 167px; right: 402px; bottom: -20px; }
+.esc-break-logo {
+  position: relative;
+  z-index: 2;
+  width: 82%;
+  max-width: 769px;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .esc-break { min-height: 440px; }
+}
+
+@media (min-width: 1024px) {
+  .esc-break { min-height: 617px; }
+  .esc-break-union { display: block; }
+}
+
+/* ============================================================
+   NOSSA MISSÃO
+   ============================================================ */
+.esc-missao {
+  background-color: #ffffff;
+  padding: 60px 16px;
+}
+.esc-missao-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.esc-missao-topo {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 24px;
+  align-items: flex-start;
+}
+.esc-missao-titulo {
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -1.7px;
+  color: #000000;
+  max-width: 749px;
+}
+.esc-missao-titulo span { font-weight: 700; color: #032846; }
+.esc-missao-label { color: #032846; flex-shrink: 0; }
+.esc-missao-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  max-width: 876px;
+}
+.esc-missao-card {
+  border: 1px solid rgba(0, 0, 0, 0.17);
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+  min-height: 222px;
+  justify-content: center;
+}
+.esc-missao-card > * { width: 100%; max-width: 320px; margin: 0; }
+.esc-missao-dots {
+  display: grid;
+  grid-template-columns: repeat(3, 19px);
+  grid-auto-rows: 19px;
+  gap: 2px 1px;
+  width: 59px;
+  margin: 0;
+}
+.esc-dot {
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(0, 0, 0, 0.44);
+}
+/* bolinhas "acendem" quando o card entra na tela */
+.esc-dot-cheio {
+  background-color: #d7bf99;
+  border: none;
+  opacity: 0;
+  transform: scale(0.35);
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+.esc-missao-card.esc-visivel .esc-dot-cheio { opacity: 1; transform: scale(1); }
+.esc-missao-card.esc-visivel .esc-dot-cheio:nth-child(2) { transition-delay: 0.06s; }
+.esc-missao-card.esc-visivel .esc-dot-cheio:nth-child(3) { transition-delay: 0.12s; }
+.esc-missao-card.esc-visivel .esc-dot-cheio:nth-child(4) { transition-delay: 0.18s; }
+.esc-missao-card.esc-visivel .esc-dot-cheio:nth-child(5) { transition-delay: 0.24s; }
+.esc-missao-card.esc-visivel .esc-dot-cheio:nth-child(6) { transition-delay: 0.30s; }
+@media (prefers-reduced-motion: reduce) {
+  .esc-dot-cheio { opacity: 1; transform: none; transition: none; }
+}
+.esc-missao-card-titulo {
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.1;
+  letter-spacing: -1.3px;
+  color: #000000;
+  margin-bottom: -6px;
+}
+.esc-missao-card-texto {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.96px;
+  color: #000000;
+}
+
+@media (min-width: 768px) {
+  .esc-missao { padding: 80px 24px; }
+  .esc-missao-topo { flex-direction: row; justify-content: space-between; }
+  .esc-missao-titulo { font-size: 38px; letter-spacing: -2.3px; }
+  .esc-missao-grid { grid-template-columns: repeat(2, 280px); }
+}
+
+@media (min-width: 1024px) {
+  .esc-missao { padding: 100px 32px 110px; }
+  .esc-missao-inner { gap: 48px; }
+  .esc-missao-titulo { font-size: 45px; line-height: 1; letter-spacing: -2.7px; }
+  .esc-missao-grid { grid-template-columns: repeat(3, 280px); }
+  .esc-missao-card { padding: 40px 32px; }
+  .esc-missao-card-titulo { font-size: 24px; letter-spacing: -1.44px; }
+}
+
+/* ============================================================
+   NOSSOS SÓCIOS
+   ============================================================ */
+.esc-socios {
+  background-color: #ffffff;
+  padding: 10px 16px 60px;
+}
+.esc-socios-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.esc-socios-topo {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 24px;
+  align-items: flex-start;
+}
+.esc-socios-titulo {
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: -2.2px;
+  color: #000000;
+}
+.esc-socios-titulo span { font-weight: 700; color: #032846; display: block; }
+.esc-socios-label { color: #032846; flex-shrink: 0; }
+.esc-socios-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+.esc-socio-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 340px;
+}
+.esc-socio-tag {
+  align-self: flex-start;
+  background-color: #d7bf99;
+  color: #032846;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: -0.84px;
+  padding: 10px 12px;
+}
+.esc-socio-foto {
+  width: 100%;
+  height: 330px;
+  object-fit: cover;
+  object-position: center top;
+}
+.esc-socio-nome-wrap {
+  position: relative;
+  padding-top: 10px;
+  margin-bottom: 16px;
+}
+.esc-socio-nome {
+  font-weight: 500;
+  font-size: 14.7px;
+  line-height: 1.35;
+  letter-spacing: -0.88px;
+  color: #000000;
+  white-space: nowrap;
+}
+.esc-socio-nome span { font-size: 17.7px; letter-spacing: -1.06px; }
+.esc-socio-sublinhado { width: 100%; height: auto; margin-top: 2px; }
+.esc-socio-oab {
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.35;
+  letter-spacing: -0.96px;
+  color: #666666;
+  padding-left: 9px;
+  margin-top: 8px;
+  max-width: 248px;
+}
+.esc-socio-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #032846;
+  color: #ffffff;
+  height: 30px;
+  padding: 0 14px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.35;
+  letter-spacing: 0.3px;
+  transition: background-color 0.2s ease;
+}
+.esc-socio-btn:hover { background-color: #054070; }
+.esc-socio-ponto { font-weight: 200; font-size: 32px; line-height: 1; margin-top: -6px; }
+
+@media (min-width: 768px) {
+  .esc-socios { padding: 50px 24px 80px; }
+  .esc-socios-topo { flex-direction: row; justify-content: space-between; }
+  .esc-socios-titulo { font-size: 46px; letter-spacing: -3.2px; }
+  .esc-socios-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .esc-socio-card { max-width: none; }
+}
+
+@media (min-width: 1024px) {
+  .esc-socios { padding: 60px 32px 110px; }
+  .esc-socios-inner { gap: 48px; }
+  .esc-socios-titulo { font-size: 60px; line-height: 1; letter-spacing: -4.8px; }
+  .esc-socios-grid { grid-template-columns: repeat(4, 1fr); gap: 13px; }
+}
+
+/* ============================================================
+   NOSSA EQUIPE
+   ============================================================ */
+.esc-equipe {
+  background-color: #ffffff;
+  padding: 20px 16px 70px;
+}
+.esc-equipe-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+.esc-equipe-head {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.esc-equipe-banner {
+  position: relative;
+  overflow: hidden;
+  background-image: url('../images/esc-equipe-banner.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 40px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: flex-end;
+  align-items: flex-start;
+  min-height: 240px;
+}
+.esc-equipe-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.esc-equipe-label {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  align-self: flex-start;
+}
+.esc-equipe-titulo {
+  position: relative;
+  z-index: 2;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: -1.7px;
+}
+/* linha 1 (branca) colada no fim do banner; linha 2 (navy) fora, no branco */
+.esc-equipe-titulo-in { color: #ffffff; padding-bottom: 14px; }
+.esc-equipe-titulo-out { color: #032846; padding-left: 24px; }
+.esc-equipe-texto {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.96px;
+  color: #000000;
+  max-width: 425px;
+  align-self: flex-end;
+}
+.esc-equipe-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px 16px;
+}
+.esc-adv-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.esc-adv-foto {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: center top;
+  margin-bottom: 16px;
+}
+.esc-adv-foto-vazia {
+  background: linear-gradient(155deg, #032846 0%, #00192d 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d7bf99;
+  font-size: 46px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  user-select: none;
+}
+.esc-adv-nome {
+  font-weight: 500;
+  font-size: 12.7px;
+  line-height: 1.35;
+  letter-spacing: -0.76px;
+  color: #000000;
+  margin-bottom: 11px;
+}
+.esc-adv-nome span { font-size: 15.2px; letter-spacing: -0.91px; }
+.esc-adv-oab {
+  font-weight: 500;
+  font-size: 10px;
+  line-height: 1.35;
+  text-transform: uppercase;
+  color: #666666;
+  margin-bottom: 11px;
+}
+.esc-adv-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #032846;
+  color: #ffffff;
+  height: 30px;
+  padding: 0 14px;
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.35;
+  letter-spacing: 0.3px;
+  margin-top: auto;
+  transition: background-color 0.2s ease;
+}
+.esc-adv-btn:hover { background-color: #054070; }
+.esc-adv-ponto { font-weight: 200; font-size: 32px; line-height: 1; margin-top: -6px; }
+
+@media (min-width: 768px) {
+  .esc-equipe { padding: 20px 24px 90px; }
+  .esc-equipe-banner { padding: 48px 40px 0; min-height: 280px; }
+  .esc-equipe-titulo { font-size: 44px; letter-spacing: -2.6px; }
+  .esc-equipe-titulo-in { padding-bottom: 18px; }
+  .esc-equipe-titulo-out { padding-left: 40px; }
+  .esc-equipe-grid { grid-template-columns: repeat(3, 1fr); gap: 32px 24px; }
+  .esc-adv-foto { height: 250px; }
+}
+
+@media (min-width: 1024px) {
+  .esc-equipe { padding: 30px 32px 130px; }
+  .esc-equipe-inner { gap: 48px; }
+  .esc-equipe-banner { padding: 56px 48px 0; min-height: 298px; }
+  .esc-equipe-titulo { font-size: 56px; line-height: 1; letter-spacing: -3.4px; }
+  .esc-equipe-titulo-in { padding-bottom: 22px; }
+  .esc-equipe-titulo-out { padding-left: 48px; }
+  .esc-equipe-grid { grid-template-columns: repeat(5, 1fr); gap: 48px 24px; }
+  .esc-adv-foto { height: 268px; }
+}
+
+@media (min-width: 1440px) {
+  .esc-equipe-titulo { font-size: 67.5px; letter-spacing: -4.05px; }
+}

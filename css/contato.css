@@ -1,0 +1,357 @@
+/* ============================================================
+   COTRIM ADVOGADOS — CONTATO
+   Seções: hero com formulário, informações de contato por cidade.
+   Mobile-first | breakpoints independentes (768 / 1024 / 1440)
+   ============================================================ */
+
+/* ============================================================
+   HERO + FORMULÁRIO
+   ============================================================ */
+.contato-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: #00192d;
+}
+.contato-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/hero-contato.jpg');
+  background-size: cover;
+  background-position: center 70%;
+  mix-blend-mode: overlay;
+  opacity: 0.28;
+}
+.contato-hero-glow {
+  position: absolute;
+  width: 1382px;
+  height: 1372px;
+  max-width: none;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.contato-hero-glow-1 { right: -800px; top: 380px; }
+.contato-hero-glow-2 { left: -800px; bottom: 300px; }
+.contato-hero-decos { display: none; }
+.contato-hero-deco-1 {
+  position: absolute;
+  width: 64px; height: 64px;
+  background-color: #e3cda4;
+  left: 35px; top: 119px;
+}
+.contato-hero-deco-2 {
+  position: absolute;
+  width: 41px; height: 41px;
+  background-color: rgba(235, 218, 184, 0.71);
+  left: 4px; top: 187px;
+}
+.contato-hero-deco-3 {
+  position: absolute;
+  width: 164px; height: 164px;
+  background-color: #eedbb9;
+  left: 400px; bottom: -100px;
+}
+.contato-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 110px 16px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.contato-hero-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.contato-hero-titulo {
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  letter-spacing: -1.9px;
+  color: #ffffff;
+  max-width: 620px;
+}
+.contato-hero-titulo span { font-weight: 700; color: #e3cda4; }
+.contato-hero-sub {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -1px;
+  color: #ffffff;
+  max-width: 504px;
+}
+
+/* Formulário */
+.contato-form {
+  background-color: rgba(52, 52, 52, 0.2);
+  border-left: 0.65px solid #e3cda4;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 562px;
+}
+.contato-form-linha {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.contato-form-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 0;
+}
+.contato-form-campo label {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: -0.84px;
+  color: #ffffff;
+}
+.contato-form-campo input,
+.contato-form-campo select,
+.contato-form-campo textarea {
+  background-color: #fcf6ec;
+  border: 0.65px solid #262626;
+  border-radius: 5.2px;
+  padding: 13px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.6px;
+  color: #262626;
+  width: 100%;
+  outline: none;
+}
+.contato-form-campo input::placeholder,
+.contato-form-campo textarea::placeholder { color: #666666; }
+.contato-form-campo select:invalid { color: #666666; }
+.contato-form-campo select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23666' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+.contato-form-campo textarea { resize: vertical; min-height: 106px; }
+.contato-form-campo input:focus,
+.contato-form-campo select:focus,
+.contato-form-campo textarea:focus { border-color: #e3cda4; }
+.contato-form-rodape {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: flex-start;
+}
+.contato-form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+.contato-form-checkbox input {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: #e3cda4;
+}
+.contato-form-checkbox span {
+  font-weight: 200;
+  font-size: 11.8px;
+  line-height: 1.5;
+  letter-spacing: -0.7px;
+  color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .contato-hero-inner { padding: 130px 24px 70px; }
+  .contato-hero-titulo { font-size: 42px; letter-spacing: -2.5px; }
+  .contato-hero-sub { font-size: 18px; letter-spacing: -1.1px; }
+  .contato-form { padding: 32px 48px; }
+  .contato-form-linha { flex-direction: row; gap: 32px; }
+  .contato-form-rodape { flex-direction: row; justify-content: space-between; align-items: center; width: 100%; }
+}
+
+@media (min-width: 1024px) {
+  .contato-hero-inner {
+    padding: 130px 32px 65px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+  }
+  .contato-hero-texto { padding-top: 116px; max-width: 620px; }
+  .contato-hero-titulo { font-size: 48px; line-height: 1.1; letter-spacing: -2.88px; }
+  .contato-hero-sub { font-size: 20px; letter-spacing: -1.2px; }
+  .contato-form { flex: 0 0 562px; }
+  .contato-hero-decos { display: block; }
+  .contato-form-campo input,
+  .contato-form-campo select,
+  .contato-form-campo textarea { font-size: 16px; }
+}
+
+/* ============================================================
+   ENTRE EM CONTATO (informações)
+   ============================================================ */
+.contato-info {
+  background-color: #ffffff;
+  padding: 60px 16px 70px;
+}
+.contato-info-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.contato-info-topo {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 24px;
+  align-items: flex-start;
+}
+.contato-info-titulo {
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -2.2px;
+  color: #000000;
+  max-width: 504px;
+}
+.contato-info-titulo strong { font-weight: 700; color: #032846; display: block; }
+.contato-info-label { color: #032846; flex-shrink: 0; }
+.contato-info-banner {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../images/contato-banner.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.contato-bm { display: flex; flex-direction: column; gap: 28px; }
+.contato-bm-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  min-height: 73px;
+  padding: 14px 20px;
+  background-color: #032846;
+  color: #ffffff;
+}
+.contato-bm-cidade {
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.contato-bm-colchetes {
+  position: relative;
+  display: inline-block;
+  padding: 4px 12px;
+}
+.contato-bm-colchetes::before,
+.contato-bm-colchetes::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+.contato-bm-colchetes::before {
+  left: -4px; top: -4px;
+  border-left: 1.2px solid currentColor;
+  border-top: 1.2px solid currentColor;
+}
+.contato-bm-colchetes::after {
+  right: -4px; bottom: -4px;
+  border-right: 1.2px solid currentColor;
+  border-bottom: 1.2px solid currentColor;
+}
+.contato-bm-tipo {
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+}
+.contato-bm-ponto {
+  margin-left: auto;
+  font-weight: 200;
+  font-size: 32px;
+  line-height: 1;
+}
+.contato-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.contato-lista li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: -1px;
+  color: #000000;
+}
+.contato-lista li img { width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; }
+.contato-lista a { color: #000000; }
+.contato-lista a:hover { color: #032846; text-decoration: underline; }
+.contato-lista span { max-width: 300px; }
+.contato-lista-bm { padding-left: 20px; }
+.contato-cidades {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px 48px;
+}
+.contato-cidade {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 361px;
+}
+.contato-cidade-foto {
+  width: 100%;
+  height: 245px;
+  object-fit: cover;
+  display: block;
+}
+.contato-cidade-nome {
+  font-weight: 600;
+  font-size: 21px;
+  line-height: 1.13;
+  letter-spacing: -1.26px;
+  color: #032846;
+}
+.contato-cidade-nome strong { font-weight: 700; }
+.contato-cidade .contato-lista li { font-size: 12.9px; letter-spacing: -1px; }
+.contato-cidade .contato-lista li img { width: 16px; height: 16px; }
+
+@media (min-width: 768px) {
+  .contato-info { padding: 80px 24px 90px; }
+  .contato-info-topo { flex-direction: row; justify-content: space-between; }
+  .contato-info-titulo { font-size: 46px; letter-spacing: -3px; }
+  .contato-info-banner { height: 250px; }
+  .contato-cidades { grid-template-columns: 1fr 1fr; }
+  .contato-lista-bm { padding-left: 42px; }
+}
+
+@media (min-width: 1024px) {
+  .contato-info { padding: 100px 32px 130px; }
+  .contato-info-inner { gap: 48px; }
+  .contato-info-titulo { font-size: 60px; line-height: 1.1; letter-spacing: -4.8px; }
+  .contato-info-banner { height: 298px; }
+  .contato-bm-bar { padding: 14px 80px 14px 80px; gap: 32px; }
+  .contato-bm-cidade { font-size: 36.2px; letter-spacing: -2.9px; }
+  .contato-bm-tipo { font-size: 20px; letter-spacing: -1.6px; }
+  .contato-cidades { grid-template-columns: 1fr 1fr 1fr; }
+}

@@ -1,0 +1,241 @@
+/* ============================================================
+   COTRIM ADVOGADOS — JS global
+   Menu mobile, newsletter e formulário de contato.
+   ============================================================ */
+
+(function () {
+  'use strict';
+
+  var reduz = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Iniciais de um nome (ignora conectores como "da", "de", "do")
+  var iniciais = function (nome) {
+    var partes = (nome || '').split(/\s+/).filter(function (w) {
+      return w && !/^(da|de|do|das|dos|e|di)$/i.test(w);
+    });
+    return partes.slice(0, 2).map(function (w) { return w.charAt(0); }).join('').toUpperCase();
+  };
+
+  /* ---------- Preloader (Home, 1ª visita): logo central → cabeçalho ---------- */
+  var pre = document.querySelector('.ctm-preloader');
+  var html = document.documentElement;
+  if (pre && html.classList.contains('ctm-pre-on')) {
+    var previa = location.protocol === 'file:' || /preload/i.test(location.search + location.hash);
+    if (!previa) { try { localStorage.setItem('ctmPre', '1'); } catch (e) {} }
+    var preLogo = pre.querySelector('.ctm-preloader-logo');
+    var alvo = document.querySelector('.ctm-header-logo img');
+    var encerrarPre = function () {
+      pre.classList.add('ctm-preloader-saindo');
+      setTimeout(function () {
+        html.classList.remove('ctm-pre-on');
+        if (pre.parentNode) pre.parentNode.removeChild(pre);
+      }, 600);
+    };
+    var animarPre = function () {
+      if (reduz || !alvo || !preLogo) { setTimeout(encerrarPre, 450); return; }
+      var pr = preLogo.getBoundingClientRect();
+      var hr = alvo.getBoundingClientRect();
+      if (!pr.width || !hr.width) { setTimeout(encerrarPre, 450); return; }
+      var escala = hr.width / pr.width;
+      var dx = (hr.left + hr.width / 2) - (pr.left + pr.width / 2);
+      var dy = (hr.top + hr.height / 2) - (pr.top + pr.height / 2);
+      setTimeout(function () {                       // segura no centro
+        pre.classList.add('ctm-preloader-voando');   // fundo começa a sumir junto com o voo
+        preLogo.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(' + escala + ')';
+        setTimeout(encerrarPre, 950);                // voa e depois some
+      }, 650);
+    };
+    if (document.readyState === 'complete') animarPre();
+    else window.addEventListener('load', animarPre);
+  }
+
+  /* ---------- Menu mobile (hamburger) — fullscreen ---------- */
+  var burger = document.querySelector('.ctm-header-burger');
+  var menu = document.querySelector('.ctm-header-menu');
+  var header = document.querySelector('.ctm-header');
+
+  if (burger && menu) {
+    burger.addEventListener('click', function () {
+      var aberto = menu.classList.toggle('ctm-aberto');
+      burger.classList.toggle('ctm-aberto', aberto);
+      burger.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+      if (header) header.style.backgroundColor = aberto ? '#00192d' : '';
+      document.body.style.overflow = aberto ? 'hidden' : '';
+    });
+  }
+
+  /* ---------- Palavra final rotativa (hero da home) — efeito roleta ---------- */
+  var rotativa = document.querySelector('.home-hero-rotativa');
+  if (rotativa && !reduz) {
+    var palavras = ['estratégia', 'presença', 'resultado', 'confiança', 'história', 'Cotrim'];
+    var idx = 0;
+    var dur = 380;
+    var trans = 'transform ' + dur + 'ms cubic-bezier(0.4,0,0.2,1), opacity ' + dur + 'ms ease';
+    setInterval(function () {
+      idx = (idx + 1) % palavras.length;
+      // sai subindo e some
+      rotativa.style.transition = trans;
+      rotativa.style.transform = 'translateY(-0.85em)';
+      rotativa.style.opacity = '0';
+      setTimeout(function () {
+        // troca a palavra e reposiciona embaixo, sem transição
+        rotativa.textContent = palavras[idx];
+        rotativa.style.transition = 'none';
+        rotativa.style.transform = 'translateY(0.85em)';
+        void rotativa.offsetWidth; // força reflow
+        // entra subindo de baixo até o lugar
+        rotativa.style.transition = trans;
+        rotativa.style.transform = 'translateY(0)';
+        rotativa.style.opacity = '1';
+      }, dur);
+    }, 2600);
+  }
+
+  /* ---------- Submenu "Autoral" (menu mobile) ---------- */
+  var grupo = document.querySelector('.ctm-header-menu-grupo');
+  var sub = document.querySelector('.ctm-header-menu-sub');
+  if (grupo && sub) {
+    grupo.addEventListener('click', function () {
+      var aberto = sub.classList.toggle('ctm-aberto');
+      grupo.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+    });
+  }
+
+  /* ---------- Bolinhas da missão "acendem" ao entrar na tela ---------- */
+  var cards = document.querySelectorAll('.esc-missao-card');
+  if (cards.length) {
+    if (reduz || !('IntersectionObserver' in window)) {
+      cards.forEach(function (c) { c.classList.add('esc-visivel'); });
+    } else {
+      var obs = new IntersectionObserver(function (entradas) {
+        entradas.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('esc-visivel'); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.35 });
+      cards.forEach(function (c) { obs.observe(c); });
+    }
+  }
+
+  /* ---------- Iniciais nos cards de advogado sem foto ---------- */
+  var vazias = document.querySelectorAll('.esc-adv-foto-vazia');
+  Array.prototype.forEach.call(vazias, function (el) {
+    if (el.textContent.trim()) return;
+    el.textContent = iniciais(el.getAttribute('aria-label'));
+  });
+
+  /* ---------- Modal de currículo (equipe / sócios) ---------- */
+  var modal = document.querySelector('.ctm-modal');
+  if (modal) {
+    var mFoto = modal.querySelector('.ctm-modal-foto');
+    var mTag = modal.querySelector('.ctm-modal-tag');
+    var mNome = modal.querySelector('.ctm-modal-nome');
+    var mOab = modal.querySelector('.ctm-modal-oab');
+    var mCorpo = modal.querySelector('.ctm-modal-corpo');
+    var focoAnterior = null;
+    var esc = function (t) { var d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+
+    var abrir = function (card) {
+      var bioEl = card.querySelector('.ctm-bio');
+      if (!bioEl) return;
+      var nomeEl = card.querySelector('.home-equipe-card-nome, .esc-socio-nome, .esc-adv-nome');
+      var oabEl = card.querySelector('.home-equipe-card-oab, .esc-socio-oab, .esc-adv-oab');
+      var tagEl = card.querySelector('.home-equipe-card-tag, .esc-socio-tag');
+      var img = card.querySelector('img');
+      var nome = nomeEl ? nomeEl.textContent.replace(/[[\]]/g, '').trim() : '';
+      var bio = bioEl.textContent.trim();
+
+      var tag = tagEl ? tagEl.textContent.trim()
+        : (/^Advogada/.test(bio) ? 'Advogada' : (/^Estagi/.test(bio) ? 'Estagiária' : 'Advogado'));
+      mTag.textContent = tag;
+      mNome.textContent = nome;
+      mOab.textContent = oabEl ? oabEl.textContent.trim() : '';
+
+      if (img && img.getAttribute('src')) {
+        mFoto.style.backgroundImage = "url('" + img.getAttribute('src') + "')";
+        mFoto.textContent = '';
+      } else {
+        mFoto.style.backgroundImage = 'none';
+        mFoto.textContent = iniciais(nome);
+      }
+
+      var frases = bio.split(/\.\s+/).map(function (f) { return f.trim(); }).filter(Boolean);
+      var lead = frases.shift() || '';
+      var html = '<p class="ctm-modal-lead">' + esc(lead.replace(/\.$/, '')) + '.</p>';
+      if (frases.length) {
+        html += '<ul class="ctm-modal-cred">' + frases.map(function (f) {
+          return '<li>' + esc(f.replace(/\.$/, '')) + '.</li>';
+        }).join('') + '</ul>';
+      }
+      mCorpo.innerHTML = html;
+      mCorpo.scrollTop = 0;
+
+      focoAnterior = document.activeElement;
+      modal.classList.add('ctm-modal-aberto');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('ctm-modal-travado');
+      var x = modal.querySelector('.ctm-modal-x');
+      if (x) x.focus();
+    };
+
+    var fechar = function () {
+      modal.classList.remove('ctm-modal-aberto');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('ctm-modal-travado');
+      if (focoAnterior && focoAnterior.focus) focoAnterior.focus();
+    };
+
+    var botoes = document.querySelectorAll('.home-equipe-card-btn, .esc-socio-btn, .esc-adv-btn');
+    Array.prototype.forEach.call(botoes, function (btn) {
+      btn.addEventListener('click', function (e) {
+        var card = btn.closest('article');
+        if (card && card.querySelector('.ctm-bio')) { e.preventDefault(); abrir(card); }
+      });
+    });
+    Array.prototype.forEach.call(modal.querySelectorAll('[data-fechar]'), function (el) {
+      el.addEventListener('click', fechar);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal.classList.contains('ctm-modal-aberto')) fechar();
+    });
+  }
+
+  /* ---------- Accordion das áreas de atuação ---------- */
+  var cabs = document.querySelectorAll('.areas-item-cab');
+  Array.prototype.forEach.call(cabs, function (cab) {
+    cab.addEventListener('click', function () {
+      var item = cab.closest('.areas-item');
+      var aberto = item.classList.toggle('aberto');
+      cab.setAttribute('aria-expanded', aberto ? 'true' : 'false');
+    });
+  });
+
+  /* ---------- Newsletter (footer) ---------- */
+  var newsForm = document.querySelector('.ctm-footer-form');
+  if (newsForm) {
+    newsForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var botao = newsForm.querySelector('button');
+      var input = newsForm.querySelector('input');
+      if (botao && input && input.value) {
+        botao.textContent = 'Inscrito ✓';
+        input.value = '';
+        setTimeout(function () { botao.textContent = 'Inscrever-se'; }, 4000);
+      }
+    });
+  }
+
+  /* ---------- Formulário de contato (página contato.html) ---------- */
+  var contatoForm = document.querySelector('.contato-form');
+  if (contatoForm) {
+    contatoForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var botao = contatoForm.querySelector('button[type="submit"], .ctm-btn[type="submit"]');
+      if (botao) {
+        var original = botao.textContent;
+        botao.textContent = 'Mensagem enviada ✓';
+        contatoForm.reset();
+        setTimeout(function () { botao.textContent = original; }, 5000);
+      }
+    });
+  }
+})();

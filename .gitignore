@@ -1,0 +1,35 @@
+# ===============================================================
+#  Cotrim Advogados — deploy (GitHub → cPanel)
+#  Só o SITE vai pro repositório: *.html, css/, js/, images/.
+#  Todo o resto abaixo é fonte / material de trabalho e fica de fora.
+# ===============================================================
+
+# --- Arquivos de sistema ---
+.DS_Store
+**/.DS_Store
+Thumbs.db
+*.log
+
+# --- Fontes e material de trabalho (NÃO fazem parte do site) ---
+_raw/
+files_extracted/
+Advogados escritório/
+imagens faltantes/
+
+# --- Plugins do WordPress (backend — não é o site estático) ---
+*.zip
+
+# --- Ferramentas / editores ---
+node_modules/
+.vscode/
+.idea/
+
+# --- Chaves SSH / segredos (NUNCA versionar) ---
+id_rsa
+id_rsa.pub
+id_ed25519
+id_ed25519.pub
+*.pem
+*.key
+*.ppk
+known_hosts

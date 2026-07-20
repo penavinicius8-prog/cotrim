@@ -1,0 +1,313 @@
+/* ============================================================
+   COTRIM ADVOGADOS — UNIDADES (SEDES)
+   Seções: hero, lista de 3 unidades (barra + foto + textos + info).
+   Mobile-first | breakpoints independentes (768 / 1024 / 1440)
+   ============================================================ */
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.sedes-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: #00192d;
+}
+.sedes-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/hero-sedes.jpg');
+  background-size: cover;
+  background-position: center top;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+.sedes-hero-glow {
+  position: absolute;
+  width: 1382px;
+  height: 1372px;
+  max-width: none;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.sedes-hero-glow-1 { right: -800px; top: 300px; }
+.sedes-hero-glow-2 { left: -800px; bottom: 300px; }
+/* mobile: faixa decorativa (quadrados + brasão) acima do título */
+.sedes-hero-decos { display: block; position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.sedes-hero-deco-1 {
+  position: absolute;
+  width: 108px; height: 108px;
+  background-color: #eedbb9;
+  right: -22px; top: 86px;
+}
+.sedes-hero-deco-2 {
+  position: absolute;
+  width: 58px; height: 58px;
+  background-color: rgba(235, 218, 184, 0.71);
+  right: 82px; top: 128px;
+}
+.sedes-hero-deco-3 {
+  position: absolute;
+  width: 38px; height: 38px;
+  background-color: rgba(235, 218, 184, 0.71);
+  right: 150px; top: 74px;
+}
+.sedes-hero-brasao {
+  position: absolute;
+  z-index: 1;
+  width: 96px;
+  height: auto;
+  right: 16px;
+  top: 96px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+.sedes-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 200px 16px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.sedes-hero-titulo {
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 1.1;
+  letter-spacing: -2.3px;
+  color: #ffffff;
+  max-width: 620px;
+}
+.sedes-hero-titulo span { font-weight: 700; color: #e3cda4; display: block; }
+.sedes-hero-sub {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -1px;
+  color: #ffffff;
+  max-width: 548px;
+}
+
+@media (min-width: 768px) {
+  .sedes-hero-inner { padding: 196px 24px 80px; }
+  .sedes-hero-titulo { font-size: 52px; letter-spacing: -3.1px; }
+  .sedes-hero-sub { font-size: 18px; letter-spacing: -1.1px; }
+}
+
+@media (min-width: 1024px) {
+  .sedes-hero-inner { padding: 220px 32px 190px; gap: 32px; }
+  .sedes-hero-titulo { font-size: 64px; line-height: 1.1; letter-spacing: -3.84px; }
+  .sedes-hero-sub { font-size: 20px; letter-spacing: -1.2px; }
+  .sedes-hero-deco-1 { width: 215px; height: 215px; right: calc(50% - 329px); top: 177px; }
+  .sedes-hero-deco-2 { width: 139px; height: 139px; right: calc(50% - 451px); top: 365px; }
+  .sedes-hero-deco-3 { width: 69px; height: 69px; right: calc(50% - 555px); top: 157px; }
+  .sedes-hero-brasao { width: 249.29px; right: calc(50% - 495px); top: 180px; bottom: auto; opacity: 0.95; }
+}
+
+/* ============================================================
+   LISTA DE UNIDADES
+   ============================================================ */
+.sedes-lista {
+  background-color: #ffffff;
+  padding: 60px 16px 70px;
+}
+.sedes-lista-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+.sede { display: flex; flex-direction: column; gap: 32px; }
+
+/* Barra da cidade — empilhada no mobile ([ tag ] / cidade / tipo) */
+.sede-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 73px;
+  padding: 22px 24px;
+}
+.sede-bar-navy { background-color: #032846; color: #ffffff; }
+.sede-bar-gold { background-color: #d7bf99; color: #032846; }
+.sede-bar-tag {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: -1.2px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.sede-bar-cidade {
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  white-space: nowrap;
+}
+.sede-bar-colchetes {
+  position: relative;
+  display: inline-block;
+  padding: 4px 12px;
+}
+.sede-bar-colchetes::before,
+.sede-bar-colchetes::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+.sede-bar-colchetes::before {
+  left: -4px; top: -4px;
+  border-left: 1.2px solid currentColor;
+  border-top: 1.2px solid currentColor;
+}
+.sede-bar-colchetes::after {
+  right: -4px; bottom: -4px;
+  border-right: 1.2px solid currentColor;
+  border-bottom: 1.2px solid currentColor;
+}
+.sede-bar-tipo {
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+}
+.sede-bar-ponto {
+  display: none;
+  margin-left: auto;
+  font-weight: 200;
+  font-size: 32px;
+  line-height: 1;
+}
+
+/* Corpo da unidade */
+.sede-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.sede-esq {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.sede-foto-wrap { position: relative; }
+.sede-foto {
+  width: 100%;
+  max-width: 534px;
+  height: auto;
+  aspect-ratio: 534 / 240;
+  object-fit: cover;
+  display: block;
+}
+/* Brasília: foto do time — ancora no topo pra não cortar as cabeças */
+.sede-foto-topo { object-position: center top; }
+.sede-deco { display: none; }
+.sede-deco-a {
+  position: absolute;
+  width: 54px; height: 54px;
+  background-color: #eedbb9;
+  left: -37px; top: 14px;
+}
+.sede-deco-b {
+  position: absolute;
+  width: 35px; height: 35px;
+  background-color: rgba(235, 218, 184, 0.71);
+  left: 13px; top: -24px;
+}
+.sede-deco-c {
+  position: absolute;
+  width: 54px; height: 54px;
+  background-color: #eedbb9;
+  left: -11px; top: 7px;
+}
+.sede-deco-d {
+  position: absolute;
+  width: 35px; height: 35px;
+  background-color: rgba(235, 218, 184, 0.71);
+  left: -43px; top: -24px;
+}
+.sede-frase {
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -1.6px;
+  color: #000000;
+  max-width: 393px;
+}
+.sede-dir {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.sede-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sede-texto p {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -1.28px;
+  color: #000000;
+}
+.sede-texto strong { font-weight: 700; }
+.sede-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+.sede-info-titulo {
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1.1;
+  letter-spacing: -1.2px;
+  color: #000000;
+  margin-bottom: 10px;
+}
+.sede-info-texto {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -1.28px;
+  color: #000000;
+  max-width: 287px;
+}
+.sede-info-texto strong { font-weight: 700; }
+.sede-info-texto a { color: #000000; }
+.sede-info-texto a:hover { color: #032846; }
+.sede-info-fone a { font-weight: 500; }
+.sede-info-whats { text-decoration: underline; text-underline-position: from-font; }
+
+@media (min-width: 768px) {
+  .sedes-lista { padding: 80px 24px 90px; }
+  .sede-bar { flex-direction: row; align-items: center; flex-wrap: wrap; padding: 14px 40px; gap: 24px; }
+  .sede-bar-cidade { font-size: 32px; letter-spacing: -2.5px; }
+  .sede-bar-ponto { display: block; }
+  .sede-info { grid-template-columns: 1fr 1fr; }
+}
+
+@media (min-width: 1024px) {
+  .sedes-lista { padding: 100px 32px 130px; }
+  .sedes-lista-inner { gap: 90px; }
+  .sede { gap: 40px; }
+  .sede-bar { padding: 14px 60px; gap: 32px; }
+  .sede-bar-tag { font-size: 20px; letter-spacing: -1.6px; }
+  .sede-bar-cidade { font-size: 36.2px; letter-spacing: -2.9px; }
+  .sede-bar-tipo { font-size: 20px; letter-spacing: -1.2px; }
+  .sede-corpo {
+    flex-direction: row;
+    gap: 67px;
+  }
+  .sede-esq { flex: 0 0 534px; padding-left: 60px; }
+  .sede-foto { max-width: none; width: 100%; }
+  .sede-deco { display: block; }
+  .sede-frase { font-size: 32px; line-height: 1.1; letter-spacing: -1.92px; }
+  .sede-dir { flex: 1 1 0; }
+  .sede-info { column-gap: 48px; row-gap: 32px; }
+}

@@ -1,0 +1,215 @@
+/* ============================================================
+   COTRIM ADVOGADOS — DIFERENCIAIS
+   Seções: hero, lista de 5 diferenciais (foto | rótulo+título | texto).
+   Mobile-first | breakpoints independentes (768 / 1024 / 1440)
+   ============================================================ */
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.dif-hero {
+  position: relative;
+  overflow: hidden;
+  background-color: #00192d;
+}
+.dif-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../images/hero-diferenciais.jpg');
+  background-size: cover;
+  background-position: center top;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+.dif-hero-glow {
+  position: absolute;
+  width: 1382px;
+  height: 1372px;
+  max-width: none;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  pointer-events: none;
+}
+.dif-hero-glow-1 { right: -800px; top: 300px; }
+.dif-hero-glow-2 { left: -800px; bottom: 300px; }
+.dif-hero-decos { display: none; }
+.dif-hero-deco-1 {
+  position: absolute;
+  width: 215px; height: 215px;
+  background-color: #eedbb9;
+  left: -164px; top: 298px;
+}
+.dif-hero-deco-2 {
+  position: absolute;
+  width: 139px; height: 139px;
+  background-color: rgba(235, 218, 184, 0.71);
+  left: 34px; top: 486px;
+}
+.dif-hero-deco-3 {
+  position: absolute;
+  width: 69px; height: 69px;
+  background-color: rgba(235, 218, 184, 0.71);
+  right: 52px; top: 241px;
+}
+.dif-hero-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 120px 16px 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.dif-hero-titulo {
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: -1.8px;
+  color: #ffffff;
+  max-width: 620px;
+}
+.dif-hero-titulo span { font-weight: 700; color: #e3cda4; }
+.dif-hero-sub {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -1px;
+  color: #ffffff;
+  max-width: 548px;
+}
+
+@media (min-width: 768px) {
+  .dif-hero-inner { padding: 150px 24px 80px; }
+  .dif-hero-titulo { font-size: 38px; letter-spacing: -2.3px; }
+  .dif-hero-sub { font-size: 18px; letter-spacing: -1.1px; }
+}
+
+@media (min-width: 1024px) {
+  .dif-hero-inner { padding: 190px 32px 130px 126px; }
+  .dif-hero-titulo { font-size: 44px; line-height: 1.1; letter-spacing: -2.64px; }
+  .dif-hero-sub { font-size: 20px; letter-spacing: -1.2px; }
+  .dif-hero-decos { display: block; }
+  .dif-hero-inner { gap: 32px; }
+}
+
+/* ============================================================
+   LISTA DE DIFERENCIAIS
+   ============================================================ */
+.dif-lista {
+  background-color: #ffffff;
+  padding: 50px 16px 70px;
+}
+.dif-lista-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.dif-item { display: flex; flex-direction: column; }
+.dif-item-divisor {
+  width: 100%;
+  height: 32px;
+  background-image: url('../images/dif-divisor.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  margin-bottom: 24px;
+}
+.dif-item-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.dif-item-foto-wrap { position: relative; }
+.dif-item-foto {
+  width: 231px;
+  height: 143px;
+  object-fit: cover;
+  display: block;
+}
+.dif-item-deco { display: none; }
+.dif-item-deco-a {
+  position: absolute;
+  width: 54px; height: 54px;
+  background-color: #eedbb9;
+  left: 172px; top: 83px;
+}
+.dif-item-deco-b {
+  position: absolute;
+  width: 35px; height: 35px;
+  background-color: rgba(235, 218, 184, 0.71);
+  left: 223px; top: 133px;
+}
+.dif-item-meio {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dif-item-num {
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  color: #032846;
+}
+.dif-item-novidade {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 8px;
+  background-color: #d7bf99;
+  color: #032846;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.6px;
+  padding: 3px 9px;
+}
+.dif-item-titulo {
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  color: #000000;
+  max-width: 337px;
+}
+.dif-item-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+.dif-item-texto p {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.35;
+  letter-spacing: -0.9px;
+  color: #000000;
+}
+.dif-item-texto strong { font-weight: 600; }
+.dif-item-destaque { font-weight: 700 !important; color: #032846 !important; }
+
+@media (min-width: 768px) {
+  .dif-lista { padding: 60px 24px 90px; }
+  .dif-item-corpo {
+    display: grid;
+    grid-template-columns: 231px 1fr;
+    gap: 24px 40px;
+  }
+  .dif-item-texto { grid-column: 1 / -1; }
+}
+
+@media (min-width: 1024px) {
+  .dif-lista { padding: 70px 32px 120px; }
+  .dif-lista-inner { gap: 60px; }
+  .dif-item-divisor { margin-bottom: 24px; }
+  .dif-item-corpo {
+    grid-template-columns: 231px minmax(240px, 337px) minmax(320px, 452px);
+    gap: 40px;
+    justify-content: space-between;
+  }
+  .dif-item-texto { grid-column: auto; }
+  .dif-item-deco { display: block; }
+  .dif-item-num { font-size: 20px; letter-spacing: -1.2px; }
+  .dif-item-titulo { font-size: 30px; line-height: 1.1; letter-spacing: -1.8px; }
+  .dif-item-texto p { font-size: 14px; letter-spacing: -1.12px; }
+}

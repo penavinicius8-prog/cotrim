@@ -25,6 +25,7 @@
     var preLogo = pre.querySelector('.ctm-preloader-logo');
     var alvo = document.querySelector('.ctm-header-logo img');
     var encerrarPre = function () {
+      if (alvo) alvo.style.opacity = '1';            // revela o logo do header no exato ponto do pouso
       pre.classList.add('ctm-preloader-saindo');
       setTimeout(function () {
         html.classList.remove('ctm-pre-on');
@@ -62,6 +63,15 @@
       if (header) header.style.backgroundColor = aberto ? '#00192d' : '';
       document.body.style.overflow = aberto ? 'hidden' : '';
     });
+  }
+
+  /* ---------- Cabeçalho fixo: transparente no topo, ganha fundo/borda ao rolar ---------- */
+  if (header) {
+    var aoRolar = function () {
+      header.classList.toggle('ctm-header-rolado', (window.scrollY || window.pageYOffset) > 24);
+    };
+    aoRolar();
+    window.addEventListener('scroll', aoRolar, { passive: true });
   }
 
   /* ---------- Palavra final rotativa (hero da home) — efeito roleta ---------- */
@@ -237,5 +247,59 @@
         setTimeout(function () { botao.textContent = original; }, 5000);
       }
     });
+  }
+
+  /* ---------- Carrossel de áreas (home): auto-scroll contínuo + arrastar ---------- */
+  var carrossel = document.querySelector('.home-areas-carrossel');
+  var trilho = carrossel && carrossel.querySelector('.home-areas-track');
+  if (carrossel && trilho) {
+    var pausa = false, arrasta = false, baseX = 0, baseScroll = 0, moveu = false, ultimo = 0;
+    var pos = 0; // posição acumulada em float (o scrollLeft do browser arredonda p/ inteiro)
+    var metade = function () { return trilho.scrollWidth / 2; };      // 1 conjunto (cards são duplicados)
+    var sincronizar = function () { pos = carrossel.scrollLeft; };    // realinha o float após interação
+
+    var loop = function (ts) {
+      var dt = ultimo ? ts - ultimo : 16;
+      ultimo = ts;
+      if (!pausa && !arrasta && !reduz) {
+        var m = metade();
+        pos += (m / 45000) * dt;                 // mesma cadência do marquee antigo (45s por volta)
+        if (m > 0 && pos >= m) pos -= m;          // volta ao início sem emenda (metade duplicada)
+        carrossel.scrollLeft = pos;               // acumula no 'pos', nunca relê o scrollLeft arredondado
+      }
+      requestAnimationFrame(loop);
+    };
+    requestAnimationFrame(loop);
+
+    // pausa o auto quando o mouse está em cima (deixa ler / arrastar / rolar à vontade)
+    carrossel.addEventListener('mouseenter', function () { pausa = true; });
+    carrossel.addEventListener('mouseleave', function () { pausa = false; sincronizar(); });
+
+    // arrastar com o mouse (no touch, o scroll nativo já resolve)
+    carrossel.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      arrasta = true; moveu = false; baseX = e.clientX; baseScroll = carrossel.scrollLeft;
+      carrossel.classList.add('home-areas-arrastando');
+    });
+    window.addEventListener('pointermove', function (e) {
+      if (!arrasta) return;
+      var dx = e.clientX - baseX;
+      if (Math.abs(dx) > 3) moveu = true;
+      carrossel.scrollLeft = baseScroll - dx;
+    });
+    var soltar = function () {
+      if (!arrasta) return;
+      arrasta = false; sincronizar();             // retoma o auto de onde o arrasto parou
+      carrossel.classList.remove('home-areas-arrastando');
+    };
+    window.addEventListener('pointerup', soltar);
+    window.addEventListener('pointercancel', soltar);
+    // se houve arrasto, cancela o clique que abriria o link do card
+    carrossel.addEventListener('click', function (e) {
+      if (moveu) { e.preventDefault(); e.stopPropagation(); }
+    }, true);
+    // no touch, pausa o auto enquanto o dedo interage e retoma ao soltar
+    carrossel.addEventListener('touchstart', function () { pausa = true; }, { passive: true });
+    carrossel.addEventListener('touchend', function () { pausa = false; sincronizar(); });
   }
 })();

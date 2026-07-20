@@ -25,6 +25,17 @@ a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
 button, input { font-family: inherit; }
 
+/* Scroll suave respeitando quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+/* Anti-flash de conteúdo (FOUC): esconde o que é preenchido via WordPress
+   até o JS trocar o texto estático pelo dinâmico (radar / blog / post).
+   Um <script> no <head> aplica .ctm-carregando; o JS remove ao terminar
+   (com rede de segurança de 4s, caso a API falhe → mostra o fallback). */
+.ctm-dinamico { transition: opacity 0.4s ease; }
+html.ctm-carregando .ctm-dinamico { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .ctm-dinamico { transition: none; } }
+
 /* ============================================================
    PRELOADER (Home, 1ª visita) — logo central voa para o header
    ============================================================ */
@@ -314,10 +325,18 @@ body.ctm-modal-travado { overflow: hidden; }
    HEADER / NAVEGAÇÃO (sobreposto ao hero escuro de cada página)
    ============================================================ */
 .ctm-header {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 50;
-  border-bottom: 1px solid rgba(213, 213, 213, 0.12);
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+}
+/* ao rolar (classe adicionada via JS): fundo navy translúcido + desfoque + borda */
+.ctm-header-rolado {
+  background-color: rgba(0, 25, 45, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom-color: rgba(213, 213, 213, 0.12);
 }
 .ctm-header-inner {
   position: relative;
@@ -332,6 +351,10 @@ body.ctm-modal-travado { overflow: hidden; }
 }
 .ctm-header-logo { display: block; flex-shrink: 0; }
 .ctm-header-logo img { width: 110px; height: auto; }
+/* durante a entrada (preloader), o logo do header fica invisível — quem
+   "pousa" ali é o logo voador do centro; evita dois logos sobrepostos.
+   O JS revela este logo no instante do pouso, pra troca ser imperceptível. */
+.ctm-pre-on .ctm-header-logo img { opacity: 0; }
 
 .ctm-header-nav {
   display: none;

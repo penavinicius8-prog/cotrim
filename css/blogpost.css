@@ -168,6 +168,9 @@
   flex-direction: column;
   gap: 22px;
 }
+/* header fixo não cobre o título ao clicar num item do sumário */
+.post-corpo h2,
+.post-corpo h3 { scroll-margin-top: 90px; }
 .post-corpo p {
   font-weight: 400;
   font-size: 16px;

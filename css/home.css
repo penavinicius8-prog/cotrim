@@ -420,20 +420,19 @@
 .home-areas-carrossel {
   position: relative;
   z-index: 2;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: auto;      /* o auto-scroll é feito via JS — evita conflito com o smooth global */
+  scrollbar-width: none;      /* Firefox: esconde a barra */
+  -ms-overflow-style: none;   /* Edge/IE antigo */
+  cursor: grab;
+  user-select: none;          /* não seleciona o texto dos cards ao arrastar */
 }
+.home-areas-carrossel::-webkit-scrollbar { display: none; }  /* Chrome/Safari */
+.home-areas-carrossel.home-areas-arrastando { cursor: grabbing; }
 .home-areas-track {
   display: flex;
   width: max-content;
-  animation: home-areas-marquee 45s linear infinite;
-}
-.home-areas-carrossel:hover .home-areas-track { animation-play-state: paused; }
-@keyframes home-areas-marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .home-areas-track { animation: none; }
 }
 .home-areas-card {
   position: relative;

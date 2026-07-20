@@ -11,6 +11,30 @@
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/blog.css">
   <link rel="stylesheet" href="css/blogpost.css">
+  <!-- SEO / compartilhamento (Open Graph + Twitter) -->
+  <link rel="canonical" href="https://cotrimadvogados.adv.br/blog.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Cotrim Advogados Associados">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Conteúdo jurídico para quem toma decisões — Cotrim Advogados">
+  <meta property="og:description" content="Artigos, análises e atualizações legislativas produzidos pela equipe do Cotrim Advogados com foco em direito empresarial, transportes e relações do trabalho.">
+  <meta property="og:url" content="https://cotrimadvogados.adv.br/blog.html">
+  <meta property="og:image" content="https://cotrimadvogados.adv.br/images/og-cotrim.jpg">
+  <meta property="og:image:width" content="2502">
+  <meta property="og:image:height" content="1179">
+  <meta property="og:image:alt" content="Cotrim Advogados Associados">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Conteúdo jurídico para quem toma decisões — Cotrim Advogados">
+  <meta name="twitter:description" content="Artigos, análises e atualizações legislativas produzidos pela equipe do Cotrim Advogados com foco em direito empresarial, transportes e relações do trabalho.">
+  <meta name="twitter:image" content="https://cotrimadvogados.adv.br/images/og-cotrim.jpg">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/FLAVCOTRIM.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="images/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="images/favicon-48.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <meta name="theme-color" content="#00192d">
+  <!-- anti-flash: esconde o conteúdo do WordPress até o JS trocar o texto (o JS remove ao terminar; 4s de rede de segurança) -->
+  <script>document.documentElement.classList.add('ctm-carregando');setTimeout(function(){document.documentElement.classList.remove('ctm-carregando');},4000);</script>
 </head>
 <body>
 
@@ -66,7 +90,7 @@
       <span class="post-hero-deco-2"></span>
       <span class="post-hero-deco-3"></span>
     </div>
-    <div class="post-hero-inner">
+    <div class="post-hero-inner ctm-dinamico">
       <p class="ctm-label post-hero-cat"><span class="ctm-label-line"></span>trabalhista</p>
       <h1 class="post-hero-titulo">Conteúdo jurídico para <span>quem toma decisões.</span></h1>
       <p class="post-hero-sub">Artigos, análises e atualizações legislativas produzidos pela equipe do Cotrim Advogados com foco em direito empresarial, transportes e relações do trabalho.</p>
@@ -82,7 +106,7 @@
   <!-- ================= ARTIGO ================= -->
   <section class="post-artigo">
     <div class="post-artigo-inner">
-      <aside class="post-toc">
+      <aside class="post-toc ctm-dinamico">
         <p class="post-toc-titulo">neste artigo</p>
         <ul class="post-toc-lista">
           <li><a href="#">Lorem ipsum</a></li>
@@ -93,7 +117,7 @@
           <li><a href="#">Lorem ipsum</a></li>
         </ul>
       </aside>
-      <div class="post-corpo">
+      <div class="post-corpo ctm-dinamico">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin a urna venenatis, dictum enim ut, tempus velit. Phasellus dictum ipsum eu fringilla auctor. Donec tincidunt porta porta. Duis eleifend, libero nec tincidunt porttitor, erat orci ultricies neque, at finibus orci lectus in tellus. Donec massa elit, lacinia lobortis libero non, rhoncus vulputate dui. Suspendisse eu tellus a ex tristique posuere at ac est. Proin vitae mauris vehicula est egestas mollis. Maecenas pulvinar sagittis mauris, nec tincidunt magna sagittis ac. Sed ut condimentum tellus, vel efficitur erat. Etiam porttitor tellus neque, vel rhoncus lorem finibus ut. In placerat varius nunc at tempor. Nullam velit felis, laoreet ut libero ac, imperdiet interdum diam. Phasellus luctus, odio nec cursus consectetur, orci nisi congue urna, sed faucibus ante felis at ex. Ut tincidunt nunc nec enim molestie ullamcorper. Etiam accumsan tincidunt maximus.</p>
         <p>In hac habitasse platea dictumst. Vivamus tempor a turpis sollicitudin ultricies. Aliquam erat volutpat. Phasellus finibus mattis bibendum. Etiam vel purus id lacus rhoncus venenatis ut non turpis. Vestibulum mollis purus et leo laoreet laoreet. Sed ex enim, dictum tincidunt metus at, fermentum consectetur nunc.</p>
         <p>Aenean sit amet erat et diam sodales ullamcorper et in quam. Phasellus ornare, sapien efficitur imperdiet fermentum, nisi magna tincidunt sem, id commodo lorem dui auctor nisi. Sed a quam ipsum. Mauris lobortis sollicitudin leo, sagittis aliquam lectus molestie in. Nam fringilla venenatis mi, ut luctus est rutrum at. Phasellus nisi diam, scelerisque vitae ipsum ac, condimentum rutrum est. Pellentesque efficitur vestibulum posuere.</p>
@@ -104,7 +128,7 @@
   </section>
 
   <!-- ================= ARTIGOS SIMILARES ================= -->
-  <section class="post-similares">
+  <section class="post-similares ctm-dinamico">
     <div class="post-similares-bg" aria-hidden="true"></div>
     <img class="post-similares-glow post-similares-glow-1" src="images/glow-ellipse.svg" alt="" aria-hidden="true">
     <img class="post-similares-glow post-similares-glow-2" src="images/glow-ellipse.svg" alt="" aria-hidden="true">

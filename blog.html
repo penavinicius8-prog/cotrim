@@ -10,6 +10,30 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/blog.css">
+  <!-- SEO / compartilhamento (Open Graph + Twitter) -->
+  <link rel="canonical" href="https://cotrimadvogados.adv.br/blog.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cotrim Advogados Associados">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Editorial — Cotrim Advogados Associados">
+  <meta property="og:description" content="Explore nossos blogs — informações e recursos jurídicos para ajudá-lo a tomar decisões bem fundamentadas.">
+  <meta property="og:url" content="https://cotrimadvogados.adv.br/blog.html">
+  <meta property="og:image" content="https://cotrimadvogados.adv.br/images/og-cotrim.jpg">
+  <meta property="og:image:width" content="2502">
+  <meta property="og:image:height" content="1179">
+  <meta property="og:image:alt" content="Cotrim Advogados Associados">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Editorial — Cotrim Advogados Associados">
+  <meta name="twitter:description" content="Explore nossos blogs — informações e recursos jurídicos para ajudá-lo a tomar decisões bem fundamentadas.">
+  <meta name="twitter:image" content="https://cotrimadvogados.adv.br/images/og-cotrim.jpg">
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="images/FLAVCOTRIM.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="images/favicon-96.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="images/favicon-48.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <meta name="theme-color" content="#00192d">
+  <!-- anti-flash: esconde o conteúdo do WordPress até o JS trocar o texto (o JS remove ao terminar; 4s de rede de segurança) -->
+  <script>document.documentElement.classList.add('ctm-carregando');setTimeout(function(){document.documentElement.classList.remove('ctm-carregando');},4000);</script>
 </head>
 <body>
 
@@ -108,7 +132,7 @@
         </div>
       </div>
       <div class="blog-filtros" aria-label="Filtrar por categoria"></div>
-      <div class="ctmpost-grid">
+      <div class="ctmpost-grid ctm-dinamico">
         <article class="ctmpost">
           <div class="ctmpost-foto-wrap">
             <img class="ctmpost-foto" src="images/post-trabalhista.jpg" alt="">

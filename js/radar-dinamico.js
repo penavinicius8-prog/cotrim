@@ -296,6 +296,9 @@ async function carregarEdicaoDinamica() {
     console.warn('Radar dinâmico: usando conteúdo estático de fallback —', err.message);
     // Em caso de erro, a página simplesmente mantém o HTML estático que já está no arquivo.
     // Isso é intencional: nunca deixa a página quebrada ou vazia pro visitante.
+  } finally {
+    // revela o conteúdo (dinâmico OU fallback) só depois de pronto — mata o flash do texto antigo
+    document.documentElement.classList.remove('ctm-carregando');
   }
 }
 

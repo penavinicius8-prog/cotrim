@@ -182,8 +182,8 @@ async function carregarPost(corpo) {
   montarToc(corpo);
   document.title = stripHtml(post.title && post.title.rendered) + ' — Cotrim Advogados Associados';
 
-  // artigos similares
-  carregarSimilares(post.id);
+  // artigos similares (aguarda pra revelar a página só quando tudo estiver pronto)
+  await carregarSimilares(post.id);
 }
 
 /* ---------- Boot: detecta a página e carrega ---------- */
@@ -196,6 +196,9 @@ async function carregarBlog() {
   } catch (err) {
     console.warn('Blog dinâmico: usando conteúdo estático de fallback —', err.message);
     // Em caso de erro, a página mantém o HTML estático que já está no arquivo.
+  } finally {
+    // revela o conteúdo (dinâmico OU fallback) só depois de pronto — mata o flash do texto antigo
+    document.documentElement.classList.remove('ctm-carregando');
   }
 }
 

@@ -302,4 +302,73 @@
     carrossel.addEventListener('touchstart', function () { pausa = true; }, { passive: true });
     carrossel.addEventListener('touchend', function () { pausa = false; sincronizar(); });
   }
+
+  /* ---------- Scroll suave (lerp) na rolagem do mouse/trackpad ----------
+     O scroll-behavior:smooth do CSS só suaviza cliques em âncora — não a
+     rolagem da roda. Aqui interpolamos a posição a cada frame pra dar a
+     sensação suave também na roda. Só no desktop (ponteiro fino); no touch
+     a inércia nativa já é suave. Respeita reduced-motion. */
+  (function () {
+    if (reduz) return;
+    if (!(window.matchMedia && window.matchMedia('(pointer: fine)').matches)) return;
+
+    var raiz = document.documentElement;
+    var alvoY = window.scrollY, atualY = window.scrollY, rodando = false;
+    raiz.style.scrollBehavior = 'auto'; // desliga o smooth do CSS (senão briga com o lerp por frame)
+
+    var maxY = function () { return Math.max(0, raiz.scrollHeight - window.innerHeight); };
+    var bloqueado = function () {
+      return raiz.classList.contains('ctm-pre-on') ||                 // preloader
+             document.body.classList.contains('ctm-modal-travado') || // modal de currículo
+             document.body.style.overflow === 'hidden';               // menu mobile aberto
+    };
+    // deixa rolar nativamente quando o cursor está sobre uma área com scroll próprio
+    var areaInternaRola = function (el, dir) {
+      while (el && el.nodeType === 1 && el !== document.body) {
+        var s = window.getComputedStyle(el);
+        if ((s.overflowY === 'auto' || s.overflowY === 'scroll') && el.scrollHeight > el.clientHeight + 1) {
+          var noTopo = el.scrollTop <= 0;
+          var noFim = el.scrollTop + el.clientHeight >= el.scrollHeight - 1;
+          if (!((dir < 0 && noTopo) || (dir > 0 && noFim))) return true;
+        }
+        el = el.parentElement;
+      }
+      return false;
+    };
+    var anima = function () {
+      atualY += (alvoY - atualY) * 0.14;
+      if (Math.abs(alvoY - atualY) < 0.4) { atualY = alvoY; rodando = false; }
+      window.scrollTo(0, Math.round(atualY));
+      if (rodando) requestAnimationFrame(anima);
+    };
+    window.addEventListener('wheel', function (e) {
+      if (e.ctrlKey) return;                               // pinch-zoom
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // gesto horizontal (ex.: carrossel) → nativo
+      if (bloqueado()) return;
+      if (areaInternaRola(e.target, e.deltaY)) return;     // modal/área com scroll próprio → nativo
+      var my = maxY();
+      if (my <= 0) return;
+      e.preventDefault();
+      if (!rodando) { atualY = alvoY = window.scrollY; }   // realinha ao iniciar um novo gesto
+      var d = e.deltaY * (e.deltaMode === 1 ? 16 : 1);     // linhas → px (Firefox)
+      alvoY = Math.max(0, Math.min(my, alvoY + d));
+      if (!rodando) { rodando = true; requestAnimationFrame(anima); }
+    }, { passive: false });
+
+    // âncoras internas (ex.: sumário do artigo) usam o mesmo motor, com folga pro header fixo
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var hash = a.getAttribute('href');
+      if (!hash || hash === '#') return;
+      var destino;
+      try { destino = document.querySelector(hash); } catch (err) { return; }
+      if (!destino) return;
+      e.preventDefault();
+      var y = destino.getBoundingClientRect().top + window.scrollY - 80; // 80 = folga do header fixo
+      atualY = window.scrollY;
+      alvoY = Math.max(0, Math.min(maxY(), y));
+      if (!rodando) { rodando = true; requestAnimationFrame(anima); }
+    });
+  })();
 })();

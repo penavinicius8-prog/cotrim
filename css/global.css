@@ -577,6 +577,9 @@ body.ctm-modal-travado { overflow: hidden; }
 @media (min-width: 768px) {
   .ctm-stats-inner { grid-template-columns: repeat(4, 1fr); padding: 0 24px; }
   .ctm-stats-item { padding: 22px 20px; border-bottom: none; }
+  /* linha única no desktop: divisória entre TODOS — restaura a borda que o
+     layout 2×2 do mobile removia dos itens pares (some entre "3 unidades" e "17+ áreas") */
+  .ctm-stats-item:nth-child(2n) { border-right: 1px solid rgba(255, 255, 255, 0.09); }
   .ctm-stats-item:last-child { border-right: none; }
 }
 

@@ -291,7 +291,7 @@ async function carregarEdicaoDinamica() {
 
     const ctaBtn = document.querySelector('.radar-cta-btn');
     if (ctaBtn && a.botao_texto) {
-      ctaBtn.href = a.botao_link || '#';
+      if (a.botao_link && a.botao_link !== '#') ctaBtn.href = a.botao_link; // vazio ou "#" no WP → mantém o /contato do HTML
       ctaBtn.innerHTML = `${a.botao_texto}<img src="images/radar-icon-seta.svg" alt="" aria-hidden="true">`;
     }
 

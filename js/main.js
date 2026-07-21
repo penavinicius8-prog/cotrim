@@ -16,12 +16,10 @@
     return partes.slice(0, 2).map(function (w) { return w.charAt(0); }).join('').toUpperCase();
   };
 
-  /* ---------- Preloader (Home, 1ª visita): logo central → cabeçalho ---------- */
+  /* ---------- Preloader (Home): logo central → cabeçalho — toca a cada carregamento ---------- */
   var pre = document.querySelector('.ctm-preloader');
   var html = document.documentElement;
   if (pre && html.classList.contains('ctm-pre-on')) {
-    var previa = location.protocol === 'file:' || /preload/i.test(location.search + location.hash);
-    if (!previa) { try { localStorage.setItem('ctmPre', '1'); } catch (e) {} }
     var preLogo = pre.querySelector('.ctm-preloader-logo');
     var alvo = document.querySelector('.ctm-header-logo img');
     var encerrarPre = function () {
@@ -347,7 +345,7 @@
       return false;
     };
     var anima = function () {
-      atualY += (alvoY - atualY) * 0.09;
+      atualY += (alvoY - atualY) * 0.07;                   // menor = deslize mais longo (mais "swive")
       if (Math.abs(alvoY - atualY) < 0.4) { atualY = alvoY; rodando = false; }
       window.scrollTo(0, Math.round(atualY));
       if (rodando) requestAnimationFrame(anima);
@@ -362,7 +360,7 @@
       e.preventDefault();
       if (!rodando) { atualY = alvoY = window.scrollY; }   // realinha ao iniciar um novo gesto
       var d = e.deltaY * (e.deltaMode === 1 ? 16 : 1);     // linhas → px (Firefox)
-      alvoY = Math.max(0, Math.min(my, alvoY + d));
+      alvoY = Math.max(0, Math.min(my, alvoY + d * 1.35));  // joga um pouco além → sensação de inércia
       if (!rodando) { rodando = true; requestAnimationFrame(anima); }
     }, { passive: false });
 

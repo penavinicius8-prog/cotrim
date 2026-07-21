@@ -536,6 +536,10 @@ body.ctm-modal-travado { overflow: hidden; }
   z-index: 2;
   background-color: #00192d;
   border-top: 1px solid rgba(255, 255, 255, 0.13);
+  /* isola do blend do fundo do hero (mix-blend overlay), que clareava a
+     barra e engolia as divisórias — assim o fundo fica navy uniforme e as
+     divisórias podem ser bem sutis e ainda aparecer em todas as posições */
+  isolation: isolate;
 }
 /* mobile: blocos 2×2 com divisórias vertical + horizontal */
 .ctm-stats-inner {
@@ -552,8 +556,8 @@ body.ctm-modal-travado { overflow: hidden; }
   justify-items: start;
   row-gap: 6px;
   padding: 24px 18px;
-  border-right: 1px solid rgba(255, 255, 255, 0.22);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 .ctm-stats-item:nth-child(2n) { border-right: none; }
 .ctm-stats-item:nth-child(n+3) { border-bottom: none; }
@@ -579,7 +583,7 @@ body.ctm-modal-travado { overflow: hidden; }
   .ctm-stats-item { padding: 22px 20px; border-bottom: none; }
   /* linha única no desktop: divisória entre TODOS — restaura a borda que o
      layout 2×2 do mobile removia dos itens pares (some entre "3 unidades" e "17+ áreas") */
-  .ctm-stats-item:nth-child(2n) { border-right: 1px solid rgba(255, 255, 255, 0.22); }
+  .ctm-stats-item:nth-child(2n) { border-right: 1px solid rgba(255, 255, 255, 0.12); }
   .ctm-stats-item:last-child { border-right: none; }
 }
 

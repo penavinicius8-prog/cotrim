@@ -336,6 +336,22 @@ function cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link) {
         . '</div></div></div>';
 }
 
+/* E-mail de BOAS-VINDAS enviado ao novo inscrito da newsletter */
+function cotrim_newsletter_html_boasvindas() {
+    $site = 'https://cotrimadvogados.adv.br';
+    return '<div style="background:#00192d;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;">'
+        . '<div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;">'
+        . '<div style="background:#00192d;color:#e3cda4;padding:20px 24px;font-size:17px;font-weight:700;letter-spacing:.5px;border-bottom:3px solid #d7bf99;">COTRIM ADVOGADOS ASSOCIADOS</div>'
+        . '<div style="padding:28px 24px;">'
+        . '<p style="margin:0 0 8px;color:#a8854a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Inscrição confirmada</p>'
+        . '<h1 style="margin:0 0 16px;color:#032846;font-size:23px;line-height:1.25;">Bem-vindo(a) à nossa newsletter! 🎉</h1>'
+        . '<p style="margin:0 0 16px;color:#444;font-size:15px;line-height:1.6;">Obrigado por se inscrever. A partir de agora, você vai receber em primeira mão as novidades do nosso <strong>Blog</strong> e as novas edições do <strong>Radar Tribunais Superiores</strong> — com análises e conteúdo jurídico direto no seu e-mail.</p>'
+        . '<p style="margin:0 0 24px;color:#444;font-size:15px;line-height:1.6;">Enquanto isso, aproveite pra conhecer o que já está no ar:</p>'
+        . '<a href="' . esc_url($site . '/blog') . '" style="display:inline-block;background:#d7bf99;color:#00192d;text-decoration:none;font-weight:700;padding:13px 26px;border-radius:6px;">Ver o blog &rarr;</a>'
+        . '<p style="margin:28px 0 0;color:#9a9a9a;font-size:12px;">Você recebeu este e-mail porque se inscreveu na newsletter no site da Cotrim Advogados. Se não foi você, é só ignorar.</p>'
+        . '</div></div></div>';
+}
+
 /* ------------------------------------------------------------------
  * 3) Endpoints REST que recebem os formulários do site
  * ------------------------------------------------------------------ */
@@ -491,11 +507,18 @@ function cotrim_form_receber_newsletter($req) {
         update_post_meta($post_id, 'cotrim_ip', isset($_SERVER['REMOTE_ADDR']) ? sanitize_text_field($_SERVER['REMOTE_ADDR']) : '');
     }
 
+    // 1) aviso interno pro escritório (sai do remetente dos avisos)
     $corpo = cotrim_form_html_email('Nova inscrição na newsletter', array('E-mail' => $email));
     $headers = array('Content-Type: text/html; charset=UTF-8');
-    $de = cotrim_remetente('cotrim_form_remetente');                 // aviso interno sai do mesmo remetente dos avisos
+    $de = cotrim_remetente('cotrim_form_remetente');
     if ($de) $headers[] = $de;
     wp_mail(cotrim_form_destinatarios(), 'Nova inscrição na newsletter', $corpo, $headers);
+
+    // 2) boas-vindas pro próprio inscrito (sai do remetente da newsletter)
+    $bv_headers = array('Content-Type: text/html; charset=UTF-8');
+    $bv_de = cotrim_remetente('cotrim_news_remetente');
+    if ($bv_de) $bv_headers[] = $bv_de;
+    wp_mail($email, 'Inscrição confirmada — Cotrim Advogados', cotrim_newsletter_html_boasvindas(), $bv_headers);
 
     return new WP_REST_Response(array('ok' => true), 200);
 }

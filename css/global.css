@@ -747,6 +747,16 @@ body.ctm-modal-travado { overflow: hidden; }
   max-width: 409px;
 }
 .ctm-footer-frase strong { font-weight: 700; color: #d7bf99; }
+/* rodapé do Radar: o disclaimer entra no lugar da frase-título — menor e discreto
+   (seletor composto pra vencer as regras responsivas de .ctm-footer-frase) */
+.ctm-footer-frase.ctm-footer-aviso {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: -0.2px;
+  color: #9fb0c0;
+  max-width: 760px;
+}
 
 .ctm-footer-colunas {
   display: flex;

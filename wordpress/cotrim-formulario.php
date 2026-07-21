@@ -301,29 +301,30 @@ function cotrim_newsletter_notificar($post) {
     $site = 'https://cotrimadvogados.adv.br';
     if ($post->post_type === 'blog_leve') {
         $etiqueta = 'Novo artigo no blog';
+        $botao    = 'Ler o artigo';                                  // botão vai pro artigo do blog
         $link     = $site . '/blogpost?slug=' . rawurlencode($post->post_name);
     } else {
         $etiqueta = 'Nova edição do Radar Tribunais Superiores';
+        $botao    = 'Ver o Radar';                                   // botão vai pro Radar
         $link     = $site . '/radar-tribunais-superiores';
     }
-    $titulo = get_the_title($post);
-    $resumo = wp_trim_words(wp_strip_all_tags(strip_shortcodes($post->post_content)), 45);
-
+    $titulo  = get_the_title($post);
+    $resumo  = wp_trim_words(wp_strip_all_tags(strip_shortcodes($post->post_content)), 45);
     $assunto = $etiqueta . ' — Cotrim Advogados';
-    $corpo   = cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link);
-    $base    = array('Content-Type: text/html; charset=UTF-8');
     $de = cotrim_remetente('cotrim_news_remetente');                 // newsletter sai do remetente da newsletter
-    if ($de) $base[] = $de;
 
-    // envia em lotes com BCC (protege os e-mails dos inscritos e respeita limites do servidor)
-    foreach (array_chunk($inscritos, 40) as $lote) {
-        $headers = array_merge($base, array('Bcc: ' . implode(',', $lote)));
-        wp_mail(get_option('admin_email'), $assunto, $corpo, $headers);
+    // envia individualmente (assim cada inscrito tem o SEU link de cancelar no rodapé)
+    if (function_exists('set_time_limit')) @set_time_limit(0);
+    foreach ($inscritos as $email) {
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+        if ($de) $headers[] = $de;
+        $corpo = cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link, $botao, $email);
+        wp_mail($email, $assunto, $corpo, $headers);
     }
 }
 
-/* E-mail da newsletter (com botão "Ler agora") */
-function cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link) {
+/* E-mail da newsletter (botão contextual + rodapé com link de cancelar) */
+function cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link, $botao, $email) {
     return '<div style="background:#00192d;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;">'
         . '<div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;">'
         . '<div style="background:#00192d;color:#e3cda4;padding:20px 24px;font-size:17px;font-weight:700;letter-spacing:.5px;border-bottom:3px solid #d7bf99;">COTRIM ADVOGADOS ASSOCIADOS</div>'
@@ -331,14 +332,16 @@ function cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link) {
         . '<p style="margin:0 0 8px;color:#a8854a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">' . esc_html($etiqueta) . '</p>'
         . '<h1 style="margin:0 0 14px;color:#032846;font-size:22px;line-height:1.25;">' . esc_html($titulo) . '</h1>'
         . '<p style="margin:0 0 24px;color:#444;font-size:15px;line-height:1.5;">' . esc_html($resumo) . '</p>'
-        . '<a href="' . esc_url($link) . '" style="display:inline-block;background:#d7bf99;color:#00192d;text-decoration:none;font-weight:700;padding:13px 26px;border-radius:6px;">Ler agora &rarr;</a>'
-        . '<p style="margin:28px 0 0;color:#9a9a9a;font-size:12px;">Você recebe este aviso porque assinou a newsletter no site da Cotrim Advogados.</p>'
+        . '<a href="' . esc_url($link) . '" style="display:inline-block;background:#d7bf99;color:#00192d;text-decoration:none;font-weight:700;padding:13px 26px;border-radius:6px;">' . esc_html($botao) . ' &rarr;</a>'
+        . cotrim_newsletter_rodape($email)
         . '</div></div></div>';
 }
 
-/* E-mail de BOAS-VINDAS enviado ao novo inscrito da newsletter */
-function cotrim_newsletter_html_boasvindas() {
+/* E-mail de BOAS-VINDAS ao novo inscrito (2 botões: blog + radar) */
+function cotrim_newsletter_html_boasvindas($email) {
     $site = 'https://cotrimadvogados.adv.br';
+    $btn_blog  = '<a href="' . esc_url($site . '/blog') . '" style="display:inline-block;background:#d7bf99;color:#00192d;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:6px;margin:0 10px 10px 0;">Ver o blog &rarr;</a>';
+    $btn_radar = '<a href="' . esc_url($site . '/radar-tribunais-superiores') . '" style="display:inline-block;background:#ffffff;color:#00192d;text-decoration:none;font-weight:700;padding:10px 20px;border:2px solid #00192d;border-radius:6px;margin:0 0 10px 0;">Ver o Radar &rarr;</a>';
     return '<div style="background:#00192d;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;">'
         . '<div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;">'
         . '<div style="background:#00192d;color:#e3cda4;padding:20px 24px;font-size:17px;font-weight:700;letter-spacing:.5px;border-bottom:3px solid #d7bf99;">COTRIM ADVOGADOS ASSOCIADOS</div>'
@@ -346,11 +349,74 @@ function cotrim_newsletter_html_boasvindas() {
         . '<p style="margin:0 0 8px;color:#a8854a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Inscrição confirmada</p>'
         . '<h1 style="margin:0 0 16px;color:#032846;font-size:23px;line-height:1.25;">Bem-vindo(a) à nossa newsletter! 🎉</h1>'
         . '<p style="margin:0 0 16px;color:#444;font-size:15px;line-height:1.6;">Obrigado por se inscrever. A partir de agora, você vai receber em primeira mão as novidades do nosso <strong>Blog</strong> e as novas edições do <strong>Radar Tribunais Superiores</strong> — com análises e conteúdo jurídico direto no seu e-mail.</p>'
-        . '<p style="margin:0 0 24px;color:#444;font-size:15px;line-height:1.6;">Enquanto isso, aproveite pra conhecer o que já está no ar:</p>'
-        . '<a href="' . esc_url($site . '/blog') . '" style="display:inline-block;background:#d7bf99;color:#00192d;text-decoration:none;font-weight:700;padding:13px 26px;border-radius:6px;">Ver o blog &rarr;</a>'
-        . '<p style="margin:28px 0 0;color:#9a9a9a;font-size:12px;">Você recebeu este e-mail porque se inscreveu na newsletter no site da Cotrim Advogados. Se não foi você, é só ignorar.</p>'
+        . '<p style="margin:0 0 20px;color:#444;font-size:15px;line-height:1.6;">Comece por aqui:</p>'
+        . $btn_blog . $btn_radar
+        . cotrim_newsletter_rodape($email)
         . '</div></div></div>';
 }
+
+/* ------------------------------------------------------------------
+ * 2c) Cancelar inscrição (link discreto no rodapé dos e-mails)
+ * ------------------------------------------------------------------ */
+
+/* token seguro por e-mail — sem ele ninguém cancela a inscrição de outra pessoa */
+function cotrim_cancelar_token($email) {
+    return substr(hash_hmac('sha256', strtolower(trim((string) $email)), wp_salt('auth')), 0, 20);
+}
+function cotrim_cancelar_link($email) {
+    return add_query_arg(array(
+        'cotrim_cancelar' => 1,
+        'email'           => rawurlencode($email),
+        't'               => cotrim_cancelar_token($email),
+    ), site_url('/'));
+}
+
+/* rodapé discreto (o "cancelar inscrição" pequenininho) */
+function cotrim_newsletter_rodape($email) {
+    return '<p style="margin:26px 0 0;color:#bfbfbf;font-size:11px;line-height:1.5;">Você assinou a newsletter no site da Cotrim Advogados. '
+        . '<a href="' . esc_url(cotrim_cancelar_link($email)) . '" style="color:#bfbfbf;text-decoration:underline;">cancelar inscrição</a>.</p>';
+}
+
+/* processa o clique em "cancelar inscrição" e mostra uma página de confirmação */
+add_action('wp_loaded', function () {
+    if (empty($_GET['cotrim_cancelar'])) return;
+    $email = isset($_GET['email']) ? sanitize_email(wp_unslash($_GET['email'])) : '';
+    $token = isset($_GET['t']) ? sanitize_text_field(wp_unslash($_GET['t'])) : '';
+
+    $ok = false;
+    if (is_email($email) && hash_equals(cotrim_cancelar_token($email), $token)) {
+        $leads = get_posts(array(
+            'post_type'   => 'cotrim_lead',
+            'post_status' => 'publish',
+            'numberposts' => -1,
+            'meta_key'    => 'cotrim_tipo',
+            'meta_value'  => 'newsletter',
+        ));
+        foreach ($leads as $l) {
+            if (strtolower((string) get_post_meta($l->ID, 'cotrim_email', true)) === strtolower($email)) {
+                wp_delete_post($l->ID, true);
+                $ok = true;
+            }
+        }
+    }
+
+    nocache_headers();
+    header('Content-Type: text/html; charset=utf-8');
+    $titulo = $ok ? 'Inscrição cancelada' : 'Não foi possível cancelar';
+    $msg = $ok
+        ? 'Pronto — <strong>' . esc_html($email) . '</strong> não vai mais receber a nossa newsletter.'
+        : 'O link pode estar incorreto ou a inscrição já foi cancelada.';
+    echo '<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . esc_html($titulo) . '</title></head>'
+        . '<body style="margin:0;background:#00192d;font-family:Arial,Helvetica,sans-serif;">'
+        . '<div style="max-width:520px;margin:60px auto;background:#fff;border-radius:10px;overflow:hidden;">'
+        . '<div style="background:#00192d;color:#e3cda4;padding:20px 24px;font-weight:700;letter-spacing:.5px;border-bottom:3px solid #d7bf99;">COTRIM ADVOGADOS ASSOCIADOS</div>'
+        . '<div style="padding:28px 24px;color:#333;">'
+        . '<h1 style="color:#032846;font-size:22px;margin:0 0 12px;">' . esc_html($titulo) . '</h1>'
+        . '<p style="font-size:15px;line-height:1.6;color:#444;">' . $msg . '</p>'
+        . '<p style="margin-top:22px;"><a href="https://cotrimadvogados.adv.br" style="color:#a8854a;font-weight:700;text-decoration:none;">Voltar ao site &rarr;</a></p>'
+        . '</div></div></body></html>';
+    exit;
+});
 
 /* ------------------------------------------------------------------
  * 3) Endpoints REST que recebem os formulários do site
@@ -518,7 +584,7 @@ function cotrim_form_receber_newsletter($req) {
     $bv_headers = array('Content-Type: text/html; charset=UTF-8');
     $bv_de = cotrim_remetente('cotrim_news_remetente');
     if ($bv_de) $bv_headers[] = $bv_de;
-    wp_mail($email, 'Inscrição confirmada — Cotrim Advogados', cotrim_newsletter_html_boasvindas(), $bv_headers);
+    wp_mail($email, 'Inscrição confirmada — Cotrim Advogados', cotrim_newsletter_html_boasvindas($email), $bv_headers);
 
     return new WP_REST_Response(array('ok' => true), 200);
 }

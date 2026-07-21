@@ -115,6 +115,15 @@ add_action('admin_init', function () {
         'sanitize_callback' => 'sanitize_text_field',
         'default'           => 'Novo contato pelo site',
     ));
+    // remetentes (de qual e-mail cada tipo SAI) — precisam existir como conexão no FluentSMTP
+    register_setting('cotrim_form_grupo', 'cotrim_form_remetente', array(
+        'sanitize_callback' => 'sanitize_email',
+        'default'           => '',
+    ));
+    register_setting('cotrim_form_grupo', 'cotrim_news_remetente', array(
+        'sanitize_callback' => 'sanitize_email',
+        'default'           => '',
+    ));
 });
 add_action('admin_menu', function () {
     // abas DENTRO do menu "Leads (Site)"
@@ -186,6 +195,24 @@ function cotrim_form_config_page() {
                     <th scope="row"><label for="cotrim_form_assunto">Assunto do e-mail</label></th>
                     <td><input name="cotrim_form_assunto" id="cotrim_form_assunto" type="text" class="regular-text"
                                value="<?php echo esc_attr(get_option('cotrim_form_assunto', 'Novo contato pelo site')); ?>"></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="cotrim_form_remetente">Remetente dos avisos</label></th>
+                    <td>
+                        <input name="cotrim_form_remetente" id="cotrim_form_remetente" type="text" class="regular-text"
+                               value="<?php echo esc_attr(get_option('cotrim_form_remetente', '')); ?>"
+                               placeholder="formulario@cotrimadvogados.adv.br">
+                        <p class="description">De qual e-mail <strong>saem</strong> os avisos internos (novo contato / nova inscrição). Deixe em branco pra usar o padrão do FluentSMTP. <strong>Precisa estar cadastrado como conexão no FluentSMTP.</strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="cotrim_news_remetente">Remetente da newsletter</label></th>
+                    <td>
+                        <input name="cotrim_news_remetente" id="cotrim_news_remetente" type="text" class="regular-text"
+                               value="<?php echo esc_attr(get_option('cotrim_news_remetente', '')); ?>"
+                               placeholder="newsletter@cotrimadvogados.adv.br">
+                        <p class="description">De qual e-mail <strong>sai</strong> a newsletter pros inscritos. <strong>Precisa estar cadastrado no FluentSMTP.</strong></p>
+                    </td>
                 </tr>
             </table>
             <?php submit_button('Salvar e-mail'); ?>
@@ -285,6 +312,8 @@ function cotrim_newsletter_notificar($post) {
     $assunto = $etiqueta . ' — Cotrim Advogados';
     $corpo   = cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link);
     $base    = array('Content-Type: text/html; charset=UTF-8');
+    $de = cotrim_remetente('cotrim_news_remetente');                 // newsletter sai do remetente da newsletter
+    if ($de) $base[] = $de;
 
     // envia em lotes com BCC (protege os e-mails dos inscritos e respeita limites do servidor)
     foreach (array_chunk($inscritos, 40) as $lote) {
@@ -349,6 +378,14 @@ function cotrim_form_destinatarios() {
     $lista = array_filter(array_map('trim', explode(',', (string) $raw)), 'is_email');
     if (empty($lista)) $lista = array(get_option('admin_email'));
     return array_values($lista);
+}
+
+/* Monta o cabeçalho "From:" a partir de uma opção de remetente (se for e-mail válido).
+   Se estiver vazio, devolve null e o FluentSMTP usa o remetente padrão dele. */
+function cotrim_remetente($opcao) {
+    $email = trim((string) get_option($opcao, ''));
+    if (!is_email($email)) return null;
+    return 'From: Cotrim Advogados Associados <' . $email . '>';
 }
 
 /* Monta o corpo do e-mail (HTML) com a marca do escritório */
@@ -421,7 +458,9 @@ function cotrim_form_receber_contato($req) {
         'Mensagem'          => $mensagem,
     ));
     $headers = array('Content-Type: text/html; charset=UTF-8');
-    if (is_email($email)) $headers[] = 'Reply-To: ' . $nome . ' <' . $email . '>';
+    $de = cotrim_remetente('cotrim_form_remetente');
+    if ($de) $headers[] = $de;                                       // de qual e-mail o aviso sai
+    if (is_email($email)) $headers[] = 'Reply-To: ' . $nome . ' <' . $email . '>'; // "Responder" vai pro visitante
 
     wp_mail(cotrim_form_destinatarios(), $assunto, $corpo, $headers);
 
@@ -453,7 +492,10 @@ function cotrim_form_receber_newsletter($req) {
     }
 
     $corpo = cotrim_form_html_email('Nova inscrição na newsletter', array('E-mail' => $email));
-    wp_mail(cotrim_form_destinatarios(), 'Nova inscrição na newsletter', $corpo, array('Content-Type: text/html; charset=UTF-8'));
+    $headers = array('Content-Type: text/html; charset=UTF-8');
+    $de = cotrim_remetente('cotrim_form_remetente');                 // aviso interno sai do mesmo remetente dos avisos
+    if ($de) $headers[] = $de;
+    wp_mail(cotrim_form_destinatarios(), 'Nova inscrição na newsletter', $corpo, $headers);
 
     return new WP_REST_Response(array('ok' => true), 200);
 }

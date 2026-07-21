@@ -45,8 +45,14 @@ add_action('init', function () {
         'supports'     => array('title'),
         'capability_type' => 'post',
         'map_meta_cap' => true,
+        'capabilities' => array('create_posts' => 'do_not_allow'), // leads só entram pelo formulário do site
     ));
 });
+
+/* Tira o "Adicionar novo" também da barra superior (+ Novo) */
+add_action('admin_bar_menu', function ($bar) {
+    $bar->remove_node('new-cotrim_lead');
+}, 999);
 
 /* Colunas da listagem de leads */
 add_filter('manage_cotrim_lead_posts_columns', function ($cols) {
@@ -111,13 +117,55 @@ add_action('admin_init', function () {
     ));
 });
 add_action('admin_menu', function () {
-    add_options_page('Formulário Cotrim', 'Formulário Cotrim', 'manage_options', 'cotrim-form', 'cotrim_form_config_page');
+    // "Configurações" (e-mail de destino + exportar) fica DENTRO do menu "Leads (Site)"
+    add_submenu_page('edit.php?post_type=cotrim_lead', 'Configurações do Formulário', 'Configurações', 'manage_options', 'cotrim-form', 'cotrim_form_config_page');
+    // remove o "Adicionar novo" — leads só chegam pelo formulário do site
+    remove_submenu_page('edit.php?post_type=cotrim_lead', 'post-new.php?post_type=cotrim_lead');
+});
+
+/* Exportação dos leads em planilha CSV (abre no Excel / Google Sheets) */
+add_action('admin_init', function () {
+    if (empty($_GET['cotrim_export']) || !current_user_can('manage_options')) return;
+    check_admin_referer('cotrim_export');
+
+    $leads = get_posts(array(
+        'post_type'   => 'cotrim_lead',
+        'post_status' => 'publish',
+        'numberposts' => -1,
+        'orderby'     => 'date',
+        'order'       => 'DESC',
+    ));
+
+    nocache_headers();
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename=leads-cotrim-' . date('Y-m-d') . '.csv');
+
+    $saida = fopen('php://output', 'w');
+    fwrite($saida, "\xEF\xBB\xBF"); // BOM: o Excel abre os acentos corretamente
+    fputcsv($saida, array('Data', 'Tipo', 'Nome', 'E-mail', 'WhatsApp', 'Empresa', 'Área', 'Mensagem'), ';');
+    foreach ($leads as $l) {
+        fputcsv($saida, array(
+            get_the_date('d/m/Y H:i', $l),
+            get_post_meta($l->ID, 'cotrim_tipo', true),
+            get_post_meta($l->ID, 'cotrim_nome', true),
+            get_post_meta($l->ID, 'cotrim_email', true),
+            get_post_meta($l->ID, 'cotrim_telefone', true),
+            get_post_meta($l->ID, 'cotrim_empresa', true),
+            get_post_meta($l->ID, 'cotrim_area', true),
+            get_post_meta($l->ID, 'cotrim_mensagem', true),
+        ), ';');
+    }
+    fclose($saida);
+    exit;
 });
 function cotrim_form_config_page() {
+    $export_url = wp_nonce_url(admin_url('edit.php?post_type=cotrim_lead&cotrim_export=1'), 'cotrim_export');
     ?>
     <div class="wrap">
-        <h1>Formulário Cotrim</h1>
-        <p>Cada envio do site é guardado em <strong>Leads (Site)</strong> e também enviado por e-mail para o(s) endereço(s) abaixo.</p>
+        <h1>Configurações do Formulário</h1>
+
+        <h2 style="margin-top:22px;">📧 Para onde vão os formulários</h2>
+        <p>Toda vez que alguém preencher o formulário do site, a mensagem chega no e-mail abaixo (e também fica guardada aqui em <strong>Leads (Site)</strong>).</p>
         <form method="post" action="options.php">
             <?php settings_fields('cotrim_form_grupo'); ?>
             <table class="form-table" role="presentation">
@@ -125,24 +173,24 @@ function cotrim_form_config_page() {
                     <th scope="row"><label for="cotrim_form_destino">E-mail(s) de destino</label></th>
                     <td>
                         <input name="cotrim_form_destino" id="cotrim_form_destino" type="text" class="regular-text"
-                               value="<?php echo esc_attr(get_option('cotrim_form_destino', get_option('admin_email'))); ?>">
-                        <p class="description">Para onde os formulários serão enviados. Separe por vírgula para mais de um e-mail.</p>
+                               value="<?php echo esc_attr(get_option('cotrim_form_destino', get_option('admin_email'))); ?>"
+                               placeholder="seuemail@exemplo.com">
+                        <p class="description">É este e-mail que vai receber os contatos. Para vários, separe por vírgula.</p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="cotrim_form_assunto">Assunto do e-mail</label></th>
-                    <td>
-                        <input name="cotrim_form_assunto" id="cotrim_form_assunto" type="text" class="regular-text"
-                               value="<?php echo esc_attr(get_option('cotrim_form_assunto', 'Novo contato pelo site')); ?>">
-                    </td>
+                    <td><input name="cotrim_form_assunto" id="cotrim_form_assunto" type="text" class="regular-text"
+                               value="<?php echo esc_attr(get_option('cotrim_form_assunto', 'Novo contato pelo site')); ?>"></td>
                 </tr>
             </table>
-            <?php submit_button('Salvar'); ?>
+            <?php submit_button('Salvar e-mail'); ?>
         </form>
+
         <hr>
-        <p style="color:#666">O site envia para estes endereços (já configurado no site):</p>
-        <p><code><?php echo esc_html(home_url('/?rest_route=/cotrim/v1/contato')); ?></code><br>
-           <code><?php echo esc_html(home_url('/?rest_route=/cotrim/v1/newsletter')); ?></code></p>
+        <h2>📊 Exportar leads (planilha)</h2>
+        <p>Baixe todos os envios numa planilha CSV — abre direto no Excel ou no Google Sheets.</p>
+        <p><a href="<?php echo esc_url($export_url); ?>" class="button button-primary button-hero">⬇ Exportar todos os leads (CSV)</a></p>
     </div>
     <?php
 }

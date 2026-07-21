@@ -219,18 +219,35 @@
     });
   });
 
+  /* ---------- Envio dos formulários pro WordPress (admin.cotrimadvogados.adv.br) ----------
+     O snippet no WP expõe /cotrim/v1/contato e /cotrim/v1/newsletter. Enviamos
+     como FormData (requisição "simples" — sem preflight CORS). O WP guarda o
+     lead, manda o e-mail formatado e responde { ok: true }. */
+  var WP_FORM = 'https://admin.cotrimadvogados.adv.br/?rest_route=/cotrim/v1/';
+
+  var enviarForm = function (form, rota, textoOk) {
+    var botao = form.querySelector('button[type="submit"]') || form.querySelector('button') || form.querySelector('.ctm-btn');
+    var original = botao ? botao.textContent : '';
+    if (botao) { botao.disabled = true; botao.textContent = 'Enviando…'; }
+    fetch(WP_FORM + rota, { method: 'POST', body: new FormData(form) })
+      .then(function (r) { return r.json().catch(function () { return { ok: r.ok }; }); })
+      .then(function (res) {
+        var ok = res && res.ok;
+        if (ok) form.reset();
+        if (botao) botao.textContent = ok ? textoOk : ((res && res.erro) ? res.erro : 'Erro ao enviar');
+      })
+      .catch(function () { if (botao) botao.textContent = 'Erro de conexão. Tente de novo.'; })
+      .then(function () {
+        setTimeout(function () { if (botao) { botao.disabled = false; botao.textContent = original; } }, 5000);
+      });
+  };
+
   /* ---------- Newsletter (footer) ---------- */
   var newsForm = document.querySelector('.ctm-footer-form');
   if (newsForm) {
     newsForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      var botao = newsForm.querySelector('button');
-      var input = newsForm.querySelector('input');
-      if (botao && input && input.value) {
-        botao.textContent = 'Inscrito ✓';
-        input.value = '';
-        setTimeout(function () { botao.textContent = 'Inscrever-se'; }, 4000);
-      }
+      enviarForm(newsForm, 'newsletter', 'Inscrito ✓');
     });
   }
 
@@ -239,13 +256,7 @@
   if (contatoForm) {
     contatoForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      var botao = contatoForm.querySelector('button[type="submit"], .ctm-btn[type="submit"]');
-      if (botao) {
-        var original = botao.textContent;
-        botao.textContent = 'Mensagem enviada ✓';
-        contatoForm.reset();
-        setTimeout(function () { botao.textContent = original; }, 5000);
-      }
+      enviarForm(contatoForm, 'contato', 'Mensagem enviada ✓');
     });
   }
 

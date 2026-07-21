@@ -93,6 +93,10 @@
         <p class="contato-hero-sub">Conte-nos sobre o seu negócio e a questão jurídica que você enfrenta. Nossa equipe entrará em contato para entender como podemos ajudar.</p>
       </div>
       <form class="contato-form" action="#" method="post">
+        <!-- honeypot anti-spam: invisível para pessoas; se vier preenchido, o WP ignora -->
+        <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+          <label>Não preencha este campo <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
         <div class="contato-form-linha">
           <div class="contato-form-campo">
             <label for="nome">Nome completo</label>

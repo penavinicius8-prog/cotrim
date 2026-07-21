@@ -117,7 +117,8 @@ add_action('admin_init', function () {
     ));
 });
 add_action('admin_menu', function () {
-    // "Configurações" (e-mail de destino + exportar) fica DENTRO do menu "Leads (Site)"
+    // abas DENTRO do menu "Leads (Site)"
+    add_submenu_page('edit.php?post_type=cotrim_lead', 'Newsletter — inscritos', 'Newsletter', 'manage_options', 'cotrim-newsletter', 'cotrim_newsletter_page');
     add_submenu_page('edit.php?post_type=cotrim_lead', 'Configurações do Formulário', 'Configurações', 'manage_options', 'cotrim-form', 'cotrim_form_config_page');
     // remove o "Adicionar novo" — leads só chegam pelo formulário do site
     remove_submenu_page('edit.php?post_type=cotrim_lead', 'post-new.php?post_type=cotrim_lead');
@@ -128,17 +129,20 @@ add_action('admin_init', function () {
     if (empty($_GET['cotrim_export']) || !current_user_can('manage_options')) return;
     check_admin_referer('cotrim_export');
 
-    $leads = get_posts(array(
+    $args = array(
         'post_type'   => 'cotrim_lead',
         'post_status' => 'publish',
         'numberposts' => -1,
         'orderby'     => 'date',
         'order'       => 'DESC',
-    ));
+    );
+    $tipo = isset($_GET['tipo']) ? sanitize_text_field($_GET['tipo']) : '';
+    if ($tipo !== '') { $args['meta_key'] = 'cotrim_tipo'; $args['meta_value'] = $tipo; }
+    $leads = get_posts($args);
 
     nocache_headers();
     header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename=leads-cotrim-' . date('Y-m-d') . '.csv');
+    header('Content-Disposition: attachment; filename=' . ($tipo !== '' ? $tipo : 'leads') . '-cotrim-' . date('Y-m-d') . '.csv');
 
     $saida = fopen('php://output', 'w');
     fwrite($saida, "\xEF\xBB\xBF"); // BOM: o Excel abre os acentos corretamente
@@ -193,6 +197,114 @@ function cotrim_form_config_page() {
         <p><a href="<?php echo esc_url($export_url); ?>" class="button button-primary button-hero">⬇ Exportar todos os leads (CSV)</a></p>
     </div>
     <?php
+}
+
+/* ------------------------------------------------------------------
+ * 2b) NEWSLETTER — lista de inscritos + aviso automático quando sai
+ *     conteúdo novo no blog OU no Radar Tribunais Superiores
+ * ------------------------------------------------------------------ */
+
+/* E-mails inscritos na newsletter (sem repetir) */
+function cotrim_newsletter_inscritos() {
+    $leads = get_posts(array(
+        'post_type'   => 'cotrim_lead',
+        'post_status' => 'publish',
+        'numberposts' => -1,
+        'meta_key'    => 'cotrim_tipo',
+        'meta_value'  => 'newsletter',
+    ));
+    $emails = array();
+    foreach ($leads as $l) {
+        $e = get_post_meta($l->ID, 'cotrim_email', true);
+        if (is_email($e)) $emails[strtolower($e)] = $e; // chave em minúsculo = remove duplicados
+    }
+    return array_values($emails);
+}
+
+/* Página "Newsletter" (aba dentro do menu Leads) */
+function cotrim_newsletter_page() {
+    $inscritos  = cotrim_newsletter_inscritos();
+    $export_url = wp_nonce_url(admin_url('edit.php?post_type=cotrim_lead&cotrim_export=1&tipo=newsletter'), 'cotrim_export');
+    $leads = get_posts(array(
+        'post_type'   => 'cotrim_lead',
+        'post_status' => 'publish',
+        'numberposts' => -1,
+        'orderby'     => 'date',
+        'order'       => 'DESC',
+        'meta_key'    => 'cotrim_tipo',
+        'meta_value'  => 'newsletter',
+    ));
+    ?>
+    <div class="wrap">
+        <h1>Newsletter</h1>
+        <p>Pessoas que assinaram a newsletter pelo rodapé do site. Elas recebem um e-mail <strong>automaticamente</strong> toda vez que um novo <strong>artigo do blog</strong> ou uma nova <strong>edição do Radar Tribunais Superiores</strong> é publicado.</p>
+        <p style="font-size:15px;"><strong><?php echo count($inscritos); ?></strong> inscrito(s).
+           <?php if ($inscritos) : ?><a href="<?php echo esc_url($export_url); ?>" class="button button-primary" style="margin-left:10px;">⬇ Exportar inscritos (CSV)</a><?php endif; ?>
+        </p>
+        <table class="widefat striped" style="max-width:660px;">
+            <thead><tr><th>E-mail</th><th style="width:200px;">Inscrito em</th></tr></thead>
+            <tbody>
+            <?php if (!$leads) : ?>
+                <tr><td colspan="2">Ninguém inscrito ainda.</td></tr>
+            <?php else : foreach ($leads as $l) : ?>
+                <tr>
+                    <td><?php echo esc_html(get_post_meta($l->ID, 'cotrim_email', true)); ?></td>
+                    <td><?php echo esc_html(get_the_date('d/m/Y H:i', $l)); ?></td>
+                </tr>
+            <?php endforeach; endif; ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+}
+
+/* Quando um post do blog/radar é PUBLICADO pela primeira vez, avisa os inscritos */
+add_action('transition_post_status', function ($novo, $antigo, $post) {
+    if ($novo !== 'publish' || $antigo === 'publish') return;                  // só na 1ª publicação (não em edições)
+    if (!in_array($post->post_type, array('blog_leve', 'edicoes'), true)) return;
+    if (get_post_meta($post->ID, 'cotrim_notificado', true)) return;           // trava: avisa uma vez por post
+    update_post_meta($post->ID, 'cotrim_notificado', 1);
+    cotrim_newsletter_notificar($post);
+}, 10, 3);
+
+function cotrim_newsletter_notificar($post) {
+    $inscritos = cotrim_newsletter_inscritos();
+    if (empty($inscritos)) return;
+
+    $site = 'https://cotrimadvogados.adv.br';
+    if ($post->post_type === 'blog_leve') {
+        $etiqueta = 'Novo artigo no blog';
+        $link     = $site . '/blogpost?slug=' . rawurlencode($post->post_name);
+    } else {
+        $etiqueta = 'Nova edição do Radar Tribunais Superiores';
+        $link     = $site . '/radar-tribunais-superiores';
+    }
+    $titulo = get_the_title($post);
+    $resumo = wp_trim_words(wp_strip_all_tags(strip_shortcodes($post->post_content)), 45);
+
+    $assunto = $etiqueta . ' — Cotrim Advogados';
+    $corpo   = cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link);
+    $base    = array('Content-Type: text/html; charset=UTF-8');
+
+    // envia em lotes com BCC (protege os e-mails dos inscritos e respeita limites do servidor)
+    foreach (array_chunk($inscritos, 40) as $lote) {
+        $headers = array_merge($base, array('Bcc: ' . implode(',', $lote)));
+        wp_mail(get_option('admin_email'), $assunto, $corpo, $headers);
+    }
+}
+
+/* E-mail da newsletter (com botão "Ler agora") */
+function cotrim_newsletter_html_email($etiqueta, $titulo, $resumo, $link) {
+    return '<div style="background:#00192d;padding:24px 12px;font-family:Arial,Helvetica,sans-serif;">'
+        . '<div style="max-width:600px;margin:0 auto;background:#ffffff;border-radius:10px;overflow:hidden;">'
+        . '<div style="background:#00192d;color:#e3cda4;padding:20px 24px;font-size:17px;font-weight:700;letter-spacing:.5px;border-bottom:3px solid #d7bf99;">COTRIM ADVOGADOS ASSOCIADOS</div>'
+        . '<div style="padding:28px 24px;">'
+        . '<p style="margin:0 0 8px;color:#a8854a;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">' . esc_html($etiqueta) . '</p>'
+        . '<h1 style="margin:0 0 14px;color:#032846;font-size:22px;line-height:1.25;">' . esc_html($titulo) . '</h1>'
+        . '<p style="margin:0 0 24px;color:#444;font-size:15px;line-height:1.5;">' . esc_html($resumo) . '</p>'
+        . '<a href="' . esc_url($link) . '" style="display:inline-block;background:#d7bf99;color:#00192d;text-decoration:none;font-weight:700;padding:13px 26px;border-radius:6px;">Ler agora &rarr;</a>'
+        . '<p style="margin:28px 0 0;color:#9a9a9a;font-size:12px;">Você recebe este aviso porque assinou a newsletter no site da Cotrim Advogados.</p>'
+        . '</div></div></div>';
 }
 
 /* ------------------------------------------------------------------

@@ -4,6 +4,8 @@ deployment:
     - export DEPLOYPATH=/home/cotri3184868/public_html/
     # remove o placeholder do host (index.php vazio que deixa a página em branco)
     - /bin/rm -f $DEPLOYPATH/index.php
+    # regras de URL limpa (serve .html sem a extensão)
+    - /bin/cp -R .htaccess $DEPLOYPATH
     - /bin/cp -R index.html $DEPLOYPATH
     - /bin/cp -R escritorio.html $DEPLOYPATH
     - /bin/cp -R areas-de-atuacao.html $DEPLOYPATH

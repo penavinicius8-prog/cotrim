@@ -336,7 +336,7 @@
       return false;
     };
     var anima = function () {
-      atualY += (alvoY - atualY) * 0.14;
+      atualY += (alvoY - atualY) * 0.09;
       if (Math.abs(alvoY - atualY) < 0.4) { atualY = alvoY; rodando = false; }
       window.scrollTo(0, Math.round(atualY));
       if (rodando) requestAnimationFrame(anima);

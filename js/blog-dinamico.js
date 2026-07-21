@@ -77,7 +77,7 @@ function renderCard(post, escuro) {
       </div>
       <h3 class="ctmpost-titulo">${titulo}</h3>
       <p class="ctmpost-resumo">${resumoDe(post)}</p>
-      <a class="ctmpost-link" href="blogpost.html?slug=${post.slug}">ver mais →</a>
+      <a class="ctmpost-link" href="/blogpost?slug=${post.slug}">ver mais →</a>
     </article>`;
 }
 
